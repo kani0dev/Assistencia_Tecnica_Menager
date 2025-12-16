@@ -1,10 +1,7 @@
 package Model.Device;
 
 import Model.User.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import jdk.jfr.Timestamp;
 import lombok.*;
 
@@ -23,6 +20,8 @@ public class Device {
     private String DeviceType;
     @Id
     private long id;
+
+    @ManyToOne
     private User owner;
     private String TroubleDescription;
     private LocalDate SignUpDate;
