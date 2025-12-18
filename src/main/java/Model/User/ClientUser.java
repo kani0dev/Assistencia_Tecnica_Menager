@@ -1,4 +1,5 @@
 package Model.User;
+
 import Model.Device.Device;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-public class ClientUser extends  User{
+public class ClientUser extends User {
     private List<Device> deviceList;
 }
