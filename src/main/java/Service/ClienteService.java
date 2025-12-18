@@ -2,7 +2,6 @@ package Service;
 
 import Model.User.ClientUser;
 import Repository.ClientRepo;
-import ch.qos.logback.core.net.server.Client;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,30 +17,30 @@ public class ClienteService {
     }
 
     //get all
-    List<ClientUser> ListClientUsers(){
+    public List<ClientUser> ListClientUsers(){
         return ClientRepository.findAll();
     }
 
     //get by id
-    ClientUser findtById(long id){
+    public ClientUser findtById(long id){
         Optional<ClientUser> thisClientById = ClientRepository.findById(id);
         return thisClientById.orElse(null);
 
     }
 
     //add
-    ClientUser SingUpClient(ClientUser clientUser){
+    public ClientUser SingUpClient(ClientUser clientUser){
         return  ClientRepository.save(clientUser);
     }
 
 
     //delet
-    void HardDelet(long id){
+    public void HardDelet(long id){
         if(ClientRepository.existsById(id)){
             ClientRepository.deleteById(id);
         }
     }
-    void softDelet(long id){
+    public void softDelet(long id){
         if(ClientRepository.existsById(id)){
             ClientUser thisClientById = findtById(id);
             thisClientById.setIsActive(false);
@@ -49,7 +48,7 @@ public class ClienteService {
     }
 
     //update
-    ClientUser UpdateClient(ClientUser clientUser, long id){
+    public ClientUser UpdateClient(ClientUser clientUser, long id){
         Optional<ClientUser> thisExistentCLient = ClientRepository.findById(id);
 
         if(thisExistentCLient.isPresent()){
