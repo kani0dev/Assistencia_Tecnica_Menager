@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
-    //classe q é responsavel por persistencia dos dados
     private final ClientRepo ClientRepository;
 
     public ClienteService(ClientRepo clientRepository) {
@@ -42,11 +41,29 @@ public class ClienteService {
             ClientRepository.deleteById(id);
         }
     }
-    public void softDelet(long id){
-        if(ClientRepository.existsById(id)){
-            ClientUser thisClientById = findtById(id);
-            thisClientById.setIsActive(false);
+
+    //deactivat and activate
+    public ClientUser softDelet(long id){
+        Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
+
+        if(clientToDeactivate.isPresent()){
+            ClientUser client = clientToDeactivate.get();
+            client.setIsActive(false);
+            ClientRepository.save(client);
+            return  client;
         }
+        return null;
+    }
+    public ClientUser Activate(long id){
+        Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
+
+        if(clientToDeactivate.isPresent()){
+            ClientUser client = clientToDeactivate.get();
+            client.setIsActive(true);
+            ClientRepository.save(client);
+            return  client;
+        }
+        return null;
     }
 
     //update

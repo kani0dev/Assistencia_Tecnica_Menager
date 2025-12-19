@@ -2,6 +2,7 @@ package Kani0dev.ATM.Controler;
 
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.ClienteService;
+import ch.qos.logback.core.net.server.Client;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,11 +42,14 @@ public class ClientControler {
         return deletedUser;
     }
     //soft delet
+
     @PutMapping("/d/{id}")
     public ClientUser DeactiveClient(@PathVariable long id){
-        ClientUser deactivateduser = serviceClient.findtById(id);
-        serviceClient.softDelet(id);
-        return deactivateduser;
+        return serviceClient.softDelet(id);
+    }
+    @PutMapping("/a/{id}")
+    public ClientUser ActivateClient(@PathVariable long id){
+        return  serviceClient.Activate(id);
     }
 
     @PutMapping("/edit/{id}")
