@@ -25,7 +25,6 @@ public class ClienteService {
     public ClientUser findtById(long id){
         Optional<ClientUser> thisClientById = ClientRepository.findById(id);
         return thisClientById.orElse(null);
-
     }
 
     //add

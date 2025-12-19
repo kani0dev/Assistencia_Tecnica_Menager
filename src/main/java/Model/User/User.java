@@ -1,21 +1,18 @@
 package Model.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 
-@Data
-@AllArgsConstructor
+
 @NoArgsConstructor
-@Getter
-@Setter
-@Entity
+@Data
 @SuperBuilder
-public class User {
+@Entity
+@Table(name = "Users")
+
+public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

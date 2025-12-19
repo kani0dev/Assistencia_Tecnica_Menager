@@ -22,6 +22,7 @@ public class ClientControler {
     public List<ClientUser> ShowAllClients(){
         return serviceClient.ListClientUsers();
     }
+
     @GetMapping("/list/{id}")
     public ClientUser ShowClientById(@PathVariable long id){
         return serviceClient.findtById(id);
