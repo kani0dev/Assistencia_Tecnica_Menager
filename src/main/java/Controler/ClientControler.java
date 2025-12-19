@@ -2,12 +2,11 @@ package Controler;
 
 import Model.User.ClientUser;
 import Service.ClienteService;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/clients")
 public class ClientControler {
     private final ClienteService serviceClient;
@@ -15,6 +14,9 @@ public class ClientControler {
     public ClientControler(ClienteService clienteService) {
         this.serviceClient = clienteService;
     }
+
+    @GetMapping("/")
+    public String Test(){return "chegamos";}
 
     @GetMapping("/list")
     public List<ClientUser> ShowAllClients(){
