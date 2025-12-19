@@ -1,7 +1,7 @@
-package Controler;
+package Kani0dev.ATM.Controler;
 
-import Model.User.ClientUser;
-import Service.ClienteService;
+import Kani0dev.ATM.Model.User.ClientUser;
+import Kani0dev.ATM.Service.ClienteService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,8 +29,8 @@ public class ClientControler {
     }
 
     @PostMapping("/add")
-    public void AddNewCLient(@RequestBody ClientUser client){
-        serviceClient.SingUpClient(client);
+    public ClientUser AddNewCLient(@RequestBody ClientUser client){
+        return  serviceClient.SingUpClient(client);
     }
 
     @DeleteMapping("/r/{id}")

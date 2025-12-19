@@ -1,7 +1,7 @@
-package Service;
+package Kani0dev.ATM.Service;
 
-import Model.User.ClientUser;
-import Repository.ClientRepo;
+import Kani0dev.ATM.Model.User.ClientUser;
+import Kani0dev.ATM.Repository.ClientRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,6 +29,9 @@ public class ClienteService {
 
     //add
     public ClientUser SingUpClient(ClientUser clientUser){
+        if(clientUser == null){
+            return clientUser;
+        }
         return  ClientRepository.save(clientUser);
     }
 

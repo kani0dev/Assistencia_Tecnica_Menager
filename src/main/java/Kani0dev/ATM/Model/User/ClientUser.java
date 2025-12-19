@@ -1,11 +1,8 @@
-package Model.User;
+package Kani0dev.ATM.Model.User;
 
-import Model.Device.Device;
+import Kani0dev.ATM.Model.Device.Device;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -17,7 +14,8 @@ import java.util.List;
 @SuperBuilder
 public class ClientUser extends User {
 
-    @Nullable
+    @OneToMany
+    @JoinColumn(name = "client_id")
     private List<Device> deviceList;
 
     @Override

@@ -1,17 +1,15 @@
-package Model.User;
+package Kani0dev.ATM.Model.User;
 
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 
-
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @Data
 @SuperBuilder
-@Entity
-@Table(name = "Users")
-
 public abstract class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

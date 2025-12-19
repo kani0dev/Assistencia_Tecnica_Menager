@@ -1,5 +1,5 @@
-package Model.Device;
-import Model.User.User;
+package Kani0dev.ATM.Model.Device;
+import Kani0dev.ATM.Model.User.User;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
