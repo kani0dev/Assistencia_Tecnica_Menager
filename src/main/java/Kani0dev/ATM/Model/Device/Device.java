@@ -14,6 +14,7 @@ import java.time.LocalDate;
 public class Device {
     private String DeviceType;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
