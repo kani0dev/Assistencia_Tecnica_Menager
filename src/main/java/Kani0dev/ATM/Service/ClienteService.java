@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Service;
 
+import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.ClientRepo;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,7 @@ public class ClienteService {
         if(clientUser == null){
             return clientUser;
         }
+        clientUser.setIsActive(true);
         return  ClientRepository.save(clientUser);
     }
 
@@ -45,26 +47,22 @@ public class ClienteService {
     //deactivat and activate
     public ClientUser softDelet(long id){
         Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
-
         if(clientToDeactivate.isPresent()){
             ClientUser client = clientToDeactivate.get();
-            client.setIsActive(false);
+
+            if(client.getIsActive() == true ){
+                client.setIsActive(false);
+            }
+            if(client.getIsActive() == false){
+                client.setIsActive(true);
+            }
+
             ClientRepository.save(client);
             return  client;
         }
         return null;
     }
-    public ClientUser Activate(long id){
-        Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
 
-        if(clientToDeactivate.isPresent()){
-            ClientUser client = clientToDeactivate.get();
-            client.setIsActive(true);
-            ClientRepository.save(client);
-            return  client;
-        }
-        return null;
-    }
 
     //update
     public ClientUser UpdateClient(ClientUser clientUser, long id){
@@ -77,4 +75,8 @@ public class ClienteService {
         }
         return null;
     }
+
+
+    // devices operations
+
 }
