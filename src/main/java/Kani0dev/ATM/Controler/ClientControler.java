@@ -62,9 +62,16 @@ public class ClientControler {
 
     @PostMapping("/add-device/{client_id}@{device_id}")
     public ClientUser AddDevicetoClient(@PathVariable long client_id, @PathVariable long device_id){
-        System.out.println(client_id +"@" + device_id);
         return serviceClient.addExistentDevice(client_id,device_id);
     }
 
+    @DeleteMapping("/rm-device/{client_id}@{device_id}")
+    public ClientUser removeDevice(@PathVariable long client_id, @PathVariable long device_id){
+        return serviceClient.removeADevice(client_id,device_id);
+    }
 
+    @GetMapping("/get-device/{client_id}")
+    public List<Device> SeeDevices(@PathVariable long client_id){
+        return serviceClient.seeAllDevices(client_id);
+    }
 }

@@ -91,5 +91,22 @@ public class ClienteService {
         return client;
     }
 
+    public ClientUser removeADevice(long client_id,long device_id){
+        ClientUser client  = findtById(client_id);
+        Device device = deviceService.findDeviceByid(device_id);
+
+        client.rmDevice(device);
+
+        ClientRepository.save(client);
+        devicerepository.save(device);
+
+        return client;
+    }
+
+    public List<Device> seeAllDevices(long client_id){
+        ClientUser client  = findtById(client_id);
+
+        return client.getAllDevice();
+    }
 
 }
