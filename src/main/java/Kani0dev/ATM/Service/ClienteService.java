@@ -3,17 +3,24 @@ package Kani0dev.ATM.Service;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.ClientRepo;
+import Kani0dev.ATM.Repository.DeviceRepo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+
 public class ClienteService {
     private final ClientRepo ClientRepository;
+    private final DeviceRepo devicerepository;
+    private final DeviceService deviceService;
 
-    public ClienteService(ClientRepo clientRepository) {
+    public ClienteService(ClientRepo clientRepository, DeviceRepo devicerepository, DeviceService deviceService) {
         ClientRepository = clientRepository;
+        this.devicerepository = devicerepository;
+        this.deviceService = deviceService;
     }
 
     //get all
@@ -45,22 +52,16 @@ public class ClienteService {
     }
 
     //deactivat and activate
-    public ClientUser softDelet(long id){
+    public ClientUser activate(long id,boolean bool) {
         Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
-        if(clientToDeactivate.isPresent()){
-            ClientUser client = clientToDeactivate.get();
+        ClientUser client = clientToDeactivate.get();
 
-            if(client.getIsActive() == true ){
-                client.setIsActive(false);
-            }
-            if(client.getIsActive() == false){
-                client.setIsActive(true);
-            }
-
-            ClientRepository.save(client);
-            return  client;
-        }
-        return null;
+        client.setIsActive(bool);
+        ClientRepository.save(client);
+        return client;
+    }
+    public ClientUser deactivate(long id,boolean bool){
+        return activate(id,bool);
     }
 
 
@@ -78,5 +79,34 @@ public class ClienteService {
 
 
     // devices operations
+    public ClientUser addExistentDevice(long clientId, long deviceId) {
+        ClientUser client = findtById(clientId);
+        Device device = deviceService.findDeviceByid(deviceId);
+
+        client.addDevice(device);
+
+        ClientRepository.save(client);
+        devicerepository.save(device);
+
+        return client;
+    }
+
+    public ClientUser removeADevice(long client_id,long device_id){
+        ClientUser client  = findtById(client_id);
+        Device device = deviceService.findDeviceByid(device_id);
+
+        client.rmDevice(device);
+
+        ClientRepository.save(client);
+        devicerepository.save(device);
+
+        return client;
+    }
+
+    public List<Device> seeAllDevices(long client_id){
+        ClientUser client  = findtById(client_id);
+
+        return client.getAllDevice();
+    }
 
 }
