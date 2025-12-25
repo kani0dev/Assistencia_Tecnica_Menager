@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.ClienteService;
 import ch.qos.logback.core.net.server.Client;
@@ -34,7 +35,7 @@ public class ClientControler {
         return  serviceClient.SingUpClient(client);
     }
 
-    @DeleteMapping("/r/{id}")
+    @DeleteMapping("/remove/{id}")
     //hard delet
     public ClientUser DeletClient(@PathVariable long id){
         ClientUser deletedUser = serviceClient.findtById(id);
@@ -43,17 +44,27 @@ public class ClientControler {
     }
     //soft delet
 
-    @PutMapping("/d/{id}")
+    @PutMapping("/deactivate/{id}")
     public ClientUser DeactiveClient(@PathVariable long id){
-        return serviceClient.softDelet(id);
+        return serviceClient.deactivate(id,false);
     }
-    @PutMapping("/a/{id}")
+    @PutMapping("/activate/{id}")
     public ClientUser ActivateClient(@PathVariable long id){
-        return  serviceClient.Activate(id);
+        return  serviceClient.activate(id,true);
     }
 
     @PutMapping("/edit/{id}")
     public ClientUser AlterClient(@PathVariable long id,@RequestBody ClientUser client){
         return serviceClient.UpdateClient(client,id);
     }
+
+    // devices methods;
+
+    @PostMapping("/add-device/{client_id}@{device_id}")
+    public ClientUser AddDevicetoClient(@PathVariable long client_id, @PathVariable long device_id){
+        System.out.println(client_id +"@" + device_id);
+        return serviceClient.addExistentDevice(client_id,device_id);
+    }
+
+
 }

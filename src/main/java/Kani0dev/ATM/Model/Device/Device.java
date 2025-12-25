@@ -1,5 +1,7 @@
 package Kani0dev.ATM.Model.Device;
+import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Model.User.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -18,8 +20,9 @@ public class Device {
     private long id;
 
     @ManyToOne
-    private User owner;
-    private String TroubleDescription;
-    private LocalDate SignUpDate;
+    @JsonIgnore
+    private ClientUser owner;
 
+    private String TroubleDescription;
+    private String SignUpDate;
 }

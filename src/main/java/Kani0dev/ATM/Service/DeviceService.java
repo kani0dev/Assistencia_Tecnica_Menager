@@ -1,6 +1,7 @@
 package Kani0dev.ATM.Service;
 
 import Kani0dev.ATM.Model.Device.Device;
+import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 @Service
 public class DeviceService {
-    private DeviceRepo deviceRepo;
+    private final DeviceRepo deviceRepo;
 
     public DeviceService(DeviceRepo deviceRepo) {
         this.deviceRepo = deviceRepo;
@@ -21,9 +22,8 @@ public class DeviceService {
         return deviceRepo.findAll();
     }
     //findbyid
-    public Device findByid(long id){
-        Optional<Device> thisDevice = deviceRepo.findById(id);
-        return thisDevice.orElse(null);
+    public Device findDeviceByid(long id){
+        return deviceRepo.findById(id).orElseThrow();
     }
     //creatAdevice
     public Device createnewDevice(Device newdevice){
@@ -49,4 +49,6 @@ public class DeviceService {
         }
         return null;
     }
+
+
 }

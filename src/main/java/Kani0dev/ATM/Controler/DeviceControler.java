@@ -1,6 +1,7 @@
 package Kani0dev.ATM.Controler;
 
 import Kani0dev.ATM.Model.Device.Device;
+import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.DeviceService;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class DeviceControler {
     public List<Device> getalldevices(){    return serviceDevice.getallDevices();   }
 
     @GetMapping("/list/{id}")
-    public Device findDeviceByid(@PathVariable long id){    return serviceDevice.findByid(id);  }
+    public Device findDeviceByid(@PathVariable long id){    return serviceDevice.findDeviceByid(id);  }
 
     @PostMapping("/add")
     public Device addnewDevice(@RequestBody Device device){
@@ -33,4 +34,8 @@ public class DeviceControler {
     public Device editDevice(@RequestBody Device device, @PathVariable long id){
         return serviceDevice.editDevice(device,id);
     }
+
+    // client operation
+
+
 }
