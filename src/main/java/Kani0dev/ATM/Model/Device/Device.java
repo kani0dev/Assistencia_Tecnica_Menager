@@ -1,14 +1,12 @@
 package Kani0dev.ATM.Model.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
-import Kani0dev.ATM.Model.User.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -21,8 +19,17 @@ public class Device {
 
     @ManyToOne
     @JsonIgnore
-    private ClientUser owner;
+    @JoinColumn(name = "client_id")
+    private  ClientUser owner_id;
 
     private String TroubleDescription;
     private String SignUpDate;
+
+    @JsonProperty("owner_id")
+    public Long getOwnerId() {
+        return owner_id != null ? owner_id.getId() : null;
+    }
+
 }
+
+// todo review all relationatiom with owner atribute

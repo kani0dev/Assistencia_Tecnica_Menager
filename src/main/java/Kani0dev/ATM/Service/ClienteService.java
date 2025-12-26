@@ -106,7 +106,8 @@ public class ClienteService {
     public List<Device> seeAllDevices(long client_id){
         ClientUser client  = findtById(client_id);
 
-        return client.getAllDevice();
+        return  client.getAllDevice();
     }
+
 
 }
