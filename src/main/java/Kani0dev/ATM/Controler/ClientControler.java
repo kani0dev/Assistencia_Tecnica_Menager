@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.DTO.ClientDTO;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.ClienteService;
@@ -21,7 +22,7 @@ public class ClientControler {
     public String Test(){return "chegamos";}
 
     @GetMapping("/list")
-    public List<ClientUser> ShowAllClients(){
+    public List<ClientDTO> ShowAllClients(){
         return serviceClient.ListClientUsers();
     }
 
@@ -31,7 +32,7 @@ public class ClientControler {
     }
 
     @PostMapping("/add")
-    public ClientUser AddNewCLient(@RequestBody ClientUser client){
+    public ClientDTO AddNewCLient(@RequestBody ClientDTO client){
         return  serviceClient.SingUpClient(client);
     }
 

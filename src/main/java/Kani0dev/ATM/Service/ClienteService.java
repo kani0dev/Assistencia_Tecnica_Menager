@@ -1,5 +1,7 @@
 package Kani0dev.ATM.Service;
 
+import Kani0dev.ATM.DTO.ClientDTO;
+import Kani0dev.ATM.Mapper.ClientMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.ClientRepo;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 
@@ -16,16 +19,20 @@ public class ClienteService {
     private final ClientRepo ClientRepository;
     private final DeviceRepo devicerepository;
     private final DeviceService deviceService;
+    private final ClientMapper clientMapper;
 
-    public ClienteService(ClientRepo clientRepository, DeviceRepo devicerepository, DeviceService deviceService) {
+    public ClienteService(ClientRepo clientRepository, DeviceRepo devicerepository, DeviceService deviceService, ClientMapper clientMapper) {
         ClientRepository = clientRepository;
         this.devicerepository = devicerepository;
         this.deviceService = deviceService;
+        this.clientMapper = clientMapper;
     }
 
     //get all
-    public List<ClientUser> ListClientUsers(){
-        return ClientRepository.findAll();
+    public List<ClientDTO> ListClientUsers(){
+            List<ClientUser> clients = ClientRepository.findAll();
+
+            return clients.stream().map(clientMapper :: map).toList();
     }
 
     //get by id
@@ -35,12 +42,10 @@ public class ClienteService {
     }
 
     //add
-    public ClientUser SingUpClient(ClientUser clientUser){
-        if(clientUser == null){
-            return clientUser;
-        }
-        clientUser.setIsActive(true);
-        return  ClientRepository.save(clientUser);
+    public ClientDTO SingUpClient(ClientDTO clientUser){
+        ClientUser client = clientMapper.map(clientUser);
+        ClientRepository.save(client);
+        return  clientUser;
     }
 
 

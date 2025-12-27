@@ -2,7 +2,9 @@ package Kani0dev.ATM.Mapper;
 
 import Kani0dev.ATM.DTO.DeviceDTO;
 import Kani0dev.ATM.Model.Device.Device;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DeviceMapper {
     public static Device map(DeviceDTO devicedto){
         Device device = new Device();
