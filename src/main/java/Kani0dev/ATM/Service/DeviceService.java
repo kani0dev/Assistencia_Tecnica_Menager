@@ -1,5 +1,7 @@
 package Kani0dev.ATM.Service;
 
+import Kani0dev.ATM.DTO.DeviceDTO;
+import Kani0dev.ATM.Mapper.DeviceMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
@@ -8,29 +10,35 @@ import org.springframework.stereotype.Service;
 import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class DeviceService {
     private final DeviceRepo deviceRepo;
+    private Optional<Device> deviceMapper;
 
     public DeviceService(DeviceRepo deviceRepo) {
         this.deviceRepo = deviceRepo;
     }
 
+
     //getall
-    public List<Device> getallDevices(){
-        return deviceRepo.findAll();
+    public List<DeviceDTO> getallDevices(){
+            List<Device> devices = deviceRepo.findAll();
+            return devices.stream()
+                    .map(DeviceMapper :: map)
+                    .collect(Collectors.toList());
     }
     //findbyid
     public Device findDeviceByid(long id){
-        return deviceRepo.findById(id).orElseThrow();
+        Optional<Device> thisdevice = deviceRepo.findById(id);
+        return  thisdevice.orElse(null);
     }
     //creatAdevice
-    public Device createnewDevice(Device newdevice){
-       if(newdevice == null){
-           return newdevice;
-       }
-       return deviceRepo.save(newdevice);
+    public DeviceDTO createnewDevice(DeviceDTO newdevice){
+       Device device = DeviceMapper.map(newdevice);
+       deviceRepo.save(device);
+       return DeviceMapper.map(device);
     }
 
     //DeletDevice
@@ -40,15 +48,22 @@ public class DeviceService {
         }
     }
     //edit
-    public Device editDevice(Device device, long id){
-        Optional<Device> exitentdevice = deviceRepo.findById(id);
-        if (exitentdevice.isPresent()){
-            device.setId(id);
-            deviceRepo.save(device);
-            return device;
-        }
-        return null;
+    public DeviceDTO editDevice(DeviceDTO dto, long id) {
+        Device device = deviceRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
+
+        device.setId(dto.getId());
+        device.setDeviceType(dto.getDeviceType());
+        device.setSignUpDate(dto.getSignUpDate());
+        device.setOwner_id(dto.getOwner_id());
+        device.setTroubleDescription(dto.getTroubleDescription());
+
+        // set outros campos editáveis aqui
+
+        Device saved = deviceRepo.save(device);
+        return DeviceMapper.map(saved);
     }
+
 
 
 }
