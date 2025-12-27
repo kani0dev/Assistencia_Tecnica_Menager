@@ -1,4 +1,5 @@
 package Kani0dev.ATM.Model.Device;
+import Kani0dev.ATM.DTO.ClientDTO;
 import Kani0dev.ATM.Model.User.ClientUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,6 +30,7 @@ public class Device {
     public Long getOwnerId() {
         return owner_id != null ? owner_id.getId() : null;
     }
+
 
 }
 

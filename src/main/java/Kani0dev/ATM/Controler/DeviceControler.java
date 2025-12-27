@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.DTO.DeviceDTO;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.DeviceService;
@@ -17,13 +18,13 @@ public class DeviceControler {
     }
 
     @GetMapping("/list")
-    public List<Device> getalldevices(){    return serviceDevice.getallDevices();   }
+    public List<DeviceDTO> getalldevices(){    return serviceDevice.getallDevices();   }
 
     @GetMapping("/list/{id}")
     public Device findDeviceByid(@PathVariable long id){    return serviceDevice.findDeviceByid(id);  }
 
     @PostMapping("/add")
-    public Device addnewDevice(@RequestBody Device device){
+    public DeviceDTO addnewDevice(@RequestBody DeviceDTO device){
         return serviceDevice.createnewDevice(device);
     }
 
@@ -31,7 +32,7 @@ public class DeviceControler {
     public void rmADevice(@PathVariable long id){  serviceDevice.deletDevice(id);}
 
     @PutMapping("/edit/{id}")
-    public Device editDevice(@RequestBody Device device, @PathVariable long id){
+    public DeviceDTO editDevice(@RequestBody DeviceDTO device, @PathVariable long id){
         return serviceDevice.editDevice(device,id);
     }
 
