@@ -11,6 +11,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clients")
+@CrossOrigin(origins = "*",  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+
 public class ClientControler {
     private final ClienteService serviceClient;
 
@@ -38,10 +40,8 @@ public class ClientControler {
 
     @DeleteMapping("/remove/{id}")
     //hard delet
-    public ClientUser DeletClient(@PathVariable long id){
-        ClientUser deletedUser = serviceClient.findtById(id);
+    public void DeletClient(@PathVariable long id){
         serviceClient.HardDelet(id);
-        return deletedUser;
     }
     //soft delet
 
