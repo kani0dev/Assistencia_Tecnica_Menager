@@ -1,5 +1,5 @@
 package Kani0dev.ATM.Model.Device;
-import Kani0dev.ATM.DTO.ClientDTO;
+
 import Kani0dev.ATM.Model.User.ClientUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,30 +8,40 @@ import lombok.*;
 
 @Data
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 @Entity
-
+@Table(name = "devices")
 public class Device {
-    private String DeviceType;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id", nullable = false)
     @JsonIgnore
-    @JoinColumn(name = "client_id")
-    private  ClientUser owner_id;
+    private ClientUser owner;
 
-    private String TroubleDescription;
-    private String SignUpDate;
+    @Column(nullable = false)
+    private String type;
 
-    @JsonProperty("owner_id")
+    @Column(nullable = false)
+    private String brand;
+
+    @Column(nullable = false)
+    private String model;
+
+    @Column(unique = true)
+    private String serialNumber;
+    private String color;
+
+    @Column(columnDefinition = "TEXT")
+    private String observations;
+
+    @Column(nullable = false)
+    private String signUpDate;
+    @JsonProperty("owner")
     public Long getOwnerId() {
-        return owner_id != null ? owner_id.getId() : null;
+        return owner != null ? owner.getId() : null;
     }
-
-
 }
-
-// todo review all relationatiom with owner atribute

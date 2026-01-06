@@ -14,12 +14,12 @@ import java.util.List;
 @SuperBuilder
 public class ClientUser extends User {
 
-    @OneToMany(mappedBy = "owner_id")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
     private List<Device> deviceList = new ArrayList<>();
 
     public void addDevice(Device device) {
         this.deviceList.add(device);
-        device.setOwner_id(this);
+        device.setOwner(this);
     }
     public List<Device> rmDevice(Device device){
         deviceList.remove(device);

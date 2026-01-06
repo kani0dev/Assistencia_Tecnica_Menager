@@ -53,10 +53,10 @@ public class DeviceService {
                 .orElseThrow(() -> new RuntimeException("Device not found"));
 
         device.setId(dto.getId());
-        device.setDeviceType(dto.getDeviceType());
+        device.setType(dto.getType());
         device.setSignUpDate(dto.getSignUpDate());
-        device.setOwner_id(dto.getOwner_id());
-        device.setTroubleDescription(dto.getTroubleDescription());
+        device.setOwner(dto.getOwner());
+        device.setObservations(dto.getObservations());
 
         // set outros campos editáveis aqui
 
