@@ -4,32 +4,43 @@ import Kani0dev.ATM.DTO.ClientDTO;
 import Kani0dev.ATM.Model.User.ClientUser;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class ClientMapper {
-    public ClientUser map(ClientDTO clientDTO){
+
+    // Converte DTO (IDs) -> Entidade (Objetos)
+    public ClientUser map(ClientDTO dto) {
         ClientUser client = new ClientUser();
+        client.setId(dto.getId());
+        client.setName(dto.getName());
+        client.setPassword(dto.getPassword());
+        client.setTelefone(dto.getTelefone());
+        client.setIsActive(dto.getIsActive());
 
-        client.setId(clientDTO.getId());
-        client.setIsActive(clientDTO.getIsActive());
-        client.setName(clientDTO.getName());
-        client.setTelefone((clientDTO.getTelefone()));
-        client.addDevice(clientDTO.getDeviceList().getFirst());
-        client.setPassword(clientDTO.getPassword());
-
+        // Nota: Para salvar um ClientUser com dispositivos apenas pelo ID,
+        // você precisaria buscar os objetos Device no banco de dados primeiro.
+        // Se for apenas para o cadastro inicial, geralmente a lista vem vazia.
         return client;
     }
 
-    public ClientDTO map(ClientUser client){
-        ClientDTO clientDTO = new ClientDTO();
+    // Converte Entidade (Objetos) -> DTO (IDs)
+    public ClientDTO map(ClientUser entity) {
+        ClientDTO dto = new ClientDTO();
+        dto.setId(entity.getId());
+        dto.setName(entity.getName());
+        dto.setTelefone(entity.getTelefone());
+        dto.setIsActive(entity.getIsActive());
+        dto.setPassword(entity.getPassword());
 
-        clientDTO.setId(client.getId());
-        clientDTO.setIsActive(client.getIsActive());
-        clientDTO.setName(client.getName());
-        clientDTO.setTelefone((client.getTelefone()));
-        clientDTO.addDevice(client.getAllDevice().getFirst());
+        // Mapeia a lista de objetos Device para uma lista de Long (IDs)
+        if (entity.getAllDevice() != null) {
+            List<Long> ids = entity.getAllDevice().stream()
+                    .map(device -> device.getId())
+                    .toList();
+            dto.addDevices(ids);
+        }
 
-        clientDTO.setPassword(client.getPassword());
-
-        return clientDTO;
+        return dto;
     }
 }
