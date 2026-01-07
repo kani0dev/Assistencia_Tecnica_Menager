@@ -16,4 +16,7 @@ public class ClientDTO extends User {
 
     private List<Device> deviceList = new ArrayList<>();
 
+    public void addDevice(Device device){
+        this.deviceList.add(device);
+    }
 }

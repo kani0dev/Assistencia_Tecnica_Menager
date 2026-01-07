@@ -13,6 +13,7 @@ public class ClientMapper {
         client.setIsActive(clientDTO.getIsActive());
         client.setName(clientDTO.getName());
         client.setTelefone((clientDTO.getTelefone()));
+        client.addDevice(clientDTO.getDeviceList().getFirst());
         client.setPassword(clientDTO.getPassword());
 
         return client;
@@ -25,6 +26,8 @@ public class ClientMapper {
         clientDTO.setIsActive(client.getIsActive());
         clientDTO.setName(client.getName());
         clientDTO.setTelefone((client.getTelefone()));
+        clientDTO.addDevice(client.getAllDevice().getFirst());
+
         clientDTO.setPassword(client.getPassword());
 
         return clientDTO;

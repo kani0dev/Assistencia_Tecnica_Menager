@@ -25,12 +25,11 @@ public class ClientUser extends User {
         deviceList.remove(device);
         return deviceList;
     }
+    public Device getDevice(Device device){return  device;}
 
 
     public List<Device> getAllDevice(){
         return  deviceList;
     }
-
-
 
 }

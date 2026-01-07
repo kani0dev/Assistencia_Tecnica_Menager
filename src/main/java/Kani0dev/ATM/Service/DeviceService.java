@@ -36,6 +36,10 @@ public class DeviceService {
     }
     //creatAdevice
     public DeviceDTO createnewDevice(DeviceDTO newdevice){
+        if (newdevice == null) {
+            return new DeviceDTO();
+        }
+
        Device device = DeviceMapper.map(newdevice);
        deviceRepo.save(device);
        return DeviceMapper.map(device);
