@@ -14,7 +14,7 @@ public class DeviceDTO {
     private Long id;
 
     private ClientUser owner;
-
+    private Long ownerid = owner != null ? owner.getId() : null;
     private String type;
 
     private String brand;
@@ -27,7 +27,4 @@ public class DeviceDTO {
     private String observations;
 
     private String signUpDate;
-    public Long getOwnerId() {
-        return owner != null ? owner.getId() : null;
-    }
 }

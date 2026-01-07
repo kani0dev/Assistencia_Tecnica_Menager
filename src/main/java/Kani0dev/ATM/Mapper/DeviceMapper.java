@@ -28,8 +28,9 @@ public class DeviceMapper {
     public static DeviceDTO map(Device device){
         DeviceDTO deviceDTO = new DeviceDTO();
 
+
         deviceDTO.setId(device.getId());
-        deviceDTO.setOwner(device.getOwner());
+        deviceDTO.setOwnerid(device.getOwnerId());
         deviceDTO.setType(device.getType());
         deviceDTO.setBrand(device.getBrand());
         deviceDTO.setModel(device.getModel());
