@@ -18,9 +18,6 @@ public class ClientMapper {
         client.setTelefone(dto.getTelefone());
         client.setIsActive(dto.getIsActive());
 
-        // Nota: Para salvar um ClientUser com dispositivos apenas pelo ID,
-        // você precisaria buscar os objetos Device no banco de dados primeiro.
-        // Se for apenas para o cadastro inicial, geralmente a lista vem vazia.
         return client;
     }
 
