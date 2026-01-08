@@ -13,6 +13,7 @@ import lombok.*;
 public class DeviceDTO {
     private Long id;
 
+    @JsonIgnore
     private ClientUser owner;
     private Long ownerid = owner != null ? owner.getId() : null;
     private String type;

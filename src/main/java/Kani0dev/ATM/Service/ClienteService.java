@@ -102,10 +102,8 @@ public class ClienteService {
 
         client.rmDevice(device);
 
-        ClientRepository.save(client);
-        devicerepository.save(device);
-
-        return client;
+        devicerepository.delete(device);
+        return ClientRepository.save(client);
     }
 
     public List<Device> seeAllDevices(long client_id){

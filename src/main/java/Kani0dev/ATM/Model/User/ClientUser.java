@@ -21,9 +21,9 @@ public class ClientUser extends User {
         this.deviceList.add(device);
         device.setOwner(this);
     }
-    public List<Device> rmDevice(Device device){
-        deviceList.remove(device);
-        return deviceList;
+    public void rmDevice(Device device){
+        this.deviceList.remove(device);
+        device.setOwner(null);
     }
     public Device getDevice(Device device){return  device;}
 
