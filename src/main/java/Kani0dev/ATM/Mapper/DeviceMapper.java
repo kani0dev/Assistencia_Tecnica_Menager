@@ -10,10 +10,17 @@ public class DeviceMapper {
         Device device = new Device();
 
         device.setId(devicedto.getId());
-        device.setDeviceType(devicedto.getDeviceType());
+        device.setOwner(devicedto.getOwner());
+        device.setType(devicedto.getType());
+        device.setBrand(devicedto.getBrand());
+        device.setModel(devicedto.getModel());
+        device.setSerialNumber(devicedto.getSerialNumber());
+        device.setColor(devicedto.getColor());
+        device.setObservations(devicedto.getObservations());
         device.setSignUpDate(devicedto.getSignUpDate());
-        device.setOwner_id(devicedto.getOwner_id());
-        device.setTroubleDescription(devicedto.getTroubleDescription());
+
+        device.setObservations(devicedto.getObservations());
+
 
         return device;
     }
@@ -21,11 +28,16 @@ public class DeviceMapper {
     public static DeviceDTO map(Device device){
         DeviceDTO deviceDTO = new DeviceDTO();
 
+
         deviceDTO.setId(device.getId());
-        deviceDTO.setDeviceType(device.getDeviceType());
+        deviceDTO.setOwnerid(device.getOwnerId());
+        deviceDTO.setType(device.getType());
+        deviceDTO.setBrand(device.getBrand());
+        deviceDTO.setModel(device.getModel());
+        deviceDTO.setSerialNumber(device.getSerialNumber());
+        deviceDTO.setColor(device.getColor());
+        deviceDTO.setObservations(device.getObservations());
         deviceDTO.setSignUpDate(device.getSignUpDate());
-        deviceDTO.setOwner_id(device.getOwner_id());
-        deviceDTO.setTroubleDescription(device.getTroubleDescription());
 
         return deviceDTO;
     }

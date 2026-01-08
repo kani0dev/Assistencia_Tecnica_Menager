@@ -7,7 +7,6 @@ import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,8 +34,13 @@ public class DeviceService {
         return  thisdevice.orElse(null);
     }
     //creatAdevice
-    public DeviceDTO createnewDevice(DeviceDTO newdevice){
+    public DeviceDTO createnewDevice(DeviceDTO newdevice, ClientUser client){
+        if (newdevice == null) {
+            return new DeviceDTO();
+        }
+
        Device device = DeviceMapper.map(newdevice);
+        device.setOwner(client);
        deviceRepo.save(device);
        return DeviceMapper.map(device);
     }
@@ -53,10 +57,10 @@ public class DeviceService {
                 .orElseThrow(() -> new RuntimeException("Device not found"));
 
         device.setId(dto.getId());
-        device.setDeviceType(dto.getDeviceType());
+        device.setType(dto.getType());
         device.setSignUpDate(dto.getSignUpDate());
-        device.setOwner_id(dto.getOwner_id());
-        device.setTroubleDescription(dto.getTroubleDescription());
+        device.setOwner(dto.getOwner());
+        device.setObservations(dto.getObservations());
 
         // set outros campos editáveis aqui
 
