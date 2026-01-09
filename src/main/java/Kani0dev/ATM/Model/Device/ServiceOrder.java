@@ -14,8 +14,8 @@ import java.util.UUID;
 @Getter @Setter
 //logic confusion -  the order service will be binded in the  client or to a device
 public class ServiceOrder {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id ;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)

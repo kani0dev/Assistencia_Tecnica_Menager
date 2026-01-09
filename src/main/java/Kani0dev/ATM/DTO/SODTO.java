@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter @Setter
 public class SODTO {
-    private UUID id ;
+    private long id ;
     private Device devide_id;
     private String entry_date;
     private String curent_State;

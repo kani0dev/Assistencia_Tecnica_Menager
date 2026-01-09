@@ -28,6 +28,15 @@ public class Device {
     @OneToMany(mappedBy = "device",cascade = CascadeType.ALL)
     private List<ServiceOrder> serviceorder = new ArrayList<>();
 
+    public void addSO(ServiceOrder so){
+        this.serviceorder.add(so);
+    }
+    public void rmSo(ServiceOrder so){
+        this.serviceorder.remove(so);
+    }public List<ServiceOrder> getSOs(){
+        return  this.serviceorder;
+    }
+
     @Column(nullable = false)
     private String type;
 
