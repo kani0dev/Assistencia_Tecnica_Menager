@@ -1,6 +1,7 @@
-package Kani0dev.ATM.Model.Device;
+package Kani0dev.ATM.DTO;
 
-import jakarta.persistence.*;
+import Kani0dev.ATM.Model.Device.Device;
+import Kani0dev.ATM.Model.Device.OS_State;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,21 +11,12 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Getter @Setter
-//logic confusion -  the order service will be binded in the  client or to a device
-public class ServiceOrder {
-    @Id @GeneratedValue(strategy = GenerationType.UUID)
+public class SODTO {
     private UUID id ;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "device_id", nullable = false)
     private Device devide_id;
-
     private String entry_date;
     private String curent_State;
-
-    @Enumerated(EnumType.STRING)
     private OS_State status;
     private String defect_reported;
     private String service_description;
