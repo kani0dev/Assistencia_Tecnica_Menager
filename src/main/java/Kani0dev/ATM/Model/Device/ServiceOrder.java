@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Model.Device;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +20,8 @@ public class ServiceOrder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)
-    private Device devide_id;
+    @JsonIgnore
+    private Device device_id;
 
     private String entry_date;
     private String curent_State;

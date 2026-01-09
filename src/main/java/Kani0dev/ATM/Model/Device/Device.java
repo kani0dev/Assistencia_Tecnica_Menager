@@ -25,7 +25,7 @@ public class Device {
     @JsonIgnore
     private ClientUser owner;
 
-    @OneToMany(mappedBy = "device",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "device_id",cascade = CascadeType.ALL)
     private List<ServiceOrder> serviceorder = new ArrayList<>();
 
     public void addSO(ServiceOrder so){
