@@ -14,7 +14,8 @@ import java.util.UUID;
 @Getter @Setter
 public class SODTO {
     private long id ;
-    private Device devide_id;
+    private Device device;
+    private Long device_id = device != null ? device.getId() : null;
     private String entry_date;
     private String curent_State;
     private OS_State status;

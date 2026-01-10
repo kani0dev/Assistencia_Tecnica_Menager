@@ -25,8 +25,8 @@ public class SOControler {
         return serviceSO.addServiceTODevice(device_id,so);
     }
 
-    @DeleteMapping("rm/{device_id}@{so}")
-    public void DeletService(@RequestBody ServiceOrder so,@PathVariable long device_id){
-        serviceSO.rmServiceFromDevice(device_id,so);
+    @DeleteMapping("rm/{device_id}@{so_id}")
+    public void DeletService(@PathVariable Long so_id,@PathVariable long device_id){
+        serviceSO.rmServiceFromDevice(device_id,so_id);
     }
 }

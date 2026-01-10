@@ -35,7 +35,10 @@ public class SOService {
         return  device.get().getServiceorder();
     }
 
-    public ServiceOrder rmServiceFromDevice(long device_id, ServiceOrder serviceOrder){
+    public ServiceOrder rmServiceFromDevice(long device_id, long so_id){
+        ServiceOrder serviceOrder = ServiceOrderREPO.findById(so_id).get();
+        Device device = deviceRepo.findById(device_id).get();
+        device.rmSo(serviceOrder);
         ServiceOrderREPO.delete(serviceOrder);
         return serviceOrder;
     }
