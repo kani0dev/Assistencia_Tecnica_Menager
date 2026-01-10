@@ -6,6 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +24,18 @@ public class Device {
     @JoinColumn(name = "client_id", nullable = false)
     @JsonIgnore
     private ClientUser owner;
+
+    @OneToMany(mappedBy = "device_id",cascade = CascadeType.ALL)
+    private List<ServiceOrder> serviceorder = new ArrayList<>();
+
+    public void addSO(ServiceOrder so){
+        this.serviceorder.add(so);
+    }
+    public void rmSo(ServiceOrder so){
+        this.serviceorder.remove(so);
+    }public List<ServiceOrder> getSOs(){
+        return  this.serviceorder;
+    }
 
     @Column(nullable = false)
     private String type;
