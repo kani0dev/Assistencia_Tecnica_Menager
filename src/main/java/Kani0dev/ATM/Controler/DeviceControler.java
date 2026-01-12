@@ -1,6 +1,7 @@
 package Kani0dev.ATM.Controler;
 
 import Kani0dev.ATM.DTO.DeviceDTO;
+import Kani0dev.ATM.Mapper.DeviceMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.ClientRepo;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/device")
-@CrossOrigin(origins = "*",  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 
 public class DeviceControler {
     private final DeviceService serviceDevice;
@@ -27,23 +29,24 @@ public class DeviceControler {
     public List<DeviceDTO> getalldevices(){    return serviceDevice.getallDevices();   }
 
     @GetMapping("/list/{id}")
-    public Device findDeviceByid(@PathVariable long id){    return serviceDevice.findDeviceByid(id);  }
+    public DeviceDTO findDeviceByid(@PathVariable long id){    return serviceDevice.findDeviceById(id);  }
 
     @PostMapping("/add-to/{clientId}")
-    public DeviceDTO addnewDevice(@RequestBody DeviceDTO device,@PathVariable Long clientId){
-        Optional<ClientUser> thisclient = clientRepo.findById(clientId);
-        if(thisclient.isPresent()){
-            return serviceDevice.createnewDevice(device,thisclient.get());
-        }
-        return serviceDevice.createnewDevice(device,null);
-        }
+    public DeviceDTO addnewDevice(
+            @RequestBody DeviceDTO device,
+            @PathVariable Long clientId
+    ) {
+        ClientUser client = clientRepo.findById(clientId)
+                .orElse(null);
 
+        return serviceDevice.createnewDevice(device, client);
+    }
 
     @DeleteMapping("/rm/{id}")
     public void rmADevice(@PathVariable long id){  serviceDevice.deletDevice(id);}
 
     @PutMapping("/edit/{id}")
-    public DeviceDTO editDevice(@RequestBody DeviceDTO device, @PathVariable long id){
+    public Device editDevice(@RequestBody DeviceDTO device, @PathVariable long id){
         return serviceDevice.editDevice(device,id);
     }
 

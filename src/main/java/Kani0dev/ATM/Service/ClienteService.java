@@ -1,7 +1,9 @@
 package Kani0dev.ATM.Service;
 
 import Kani0dev.ATM.DTO.ClientDTO;
+import Kani0dev.ATM.DTO.DeviceDTO;
 import Kani0dev.ATM.Mapper.ClientMapper;
+import Kani0dev.ATM.Mapper.DeviceMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.ClientRepo;
@@ -86,9 +88,10 @@ public class ClienteService {
     // devices operations
     public ClientUser addExistentDevice(long clientId, long deviceId) {
         ClientUser client = findtById(clientId);
-        Device device = deviceService.findDeviceByid(deviceId);
+        DeviceDTO dto = deviceService.findDeviceById(deviceId);
 
-        client.addDevice(device);
+        client.addDevice(DeviceMapper.map(dto,client));
+        Device device = DeviceMapper.map(dto,client);
 
         ClientRepository.save(client);
         devicerepository.save(device);
@@ -98,8 +101,9 @@ public class ClienteService {
 
     public ClientUser removeADevice(long client_id,long device_id){
         ClientUser client  = findtById(client_id);
-        Device device = deviceService.findDeviceByid(device_id);
+        DeviceDTO dto = deviceService.findDeviceById(device_id);
 
+        Device device = DeviceMapper.map(dto,client);
         client.rmDevice(device);
 
         devicerepository.delete(device);

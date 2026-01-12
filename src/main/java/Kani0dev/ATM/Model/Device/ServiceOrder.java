@@ -26,8 +26,7 @@ public class ServiceOrder {
     private String entry_date;
     private String curent_State;
 
-    @Enumerated(EnumType.STRING)
-    private OS_State status;
+    private String status;
     private String defect_reported;
     private String service_description;
     private String warranty_period;

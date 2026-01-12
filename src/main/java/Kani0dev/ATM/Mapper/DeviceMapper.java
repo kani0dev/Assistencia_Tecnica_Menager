@@ -1,44 +1,54 @@
 package Kani0dev.ATM.Mapper;
 
 import Kani0dev.ATM.DTO.DeviceDTO;
+import Kani0dev.ATM.DTO.SODTO;
 import Kani0dev.ATM.Model.Device.Device;
-import org.springframework.stereotype.Component;
+import Kani0dev.ATM.Model.User.ClientUser;
 
-@Component
+import java.util.stream.Collectors;
+
 public class DeviceMapper {
-    public static Device map(DeviceDTO devicedto){
+
+    // DTO → ENTITY (CREATE)
+    public static Device map(DeviceDTO dto, ClientUser owner) {
         Device device = new Device();
 
-        device.setId(devicedto.getId());
-        device.setOwner(devicedto.getOwner());
-        device.setType(devicedto.getType());
-        device.setBrand(devicedto.getBrand());
-        device.setModel(devicedto.getModel());
-        device.setSerialNumber(devicedto.getSerialNumber());
-        device.setColor(devicedto.getColor());
-        device.setObservations(devicedto.getObservations());
-        device.setSignUpDate(devicedto.getSignUpDate());
-
-        device.setObservations(devicedto.getObservations());
-
+        device.setOwner(owner);
+        device.setType(dto.getType());
+        device.setBrand(dto.getBrand());
+        device.setModel(dto.getModel());
+        device.setSerialNumber(dto.getSerialNumber());
+        device.setColor(dto.getColor());
+        device.setObservations(dto.getObservations());
+        device.setSignUpDate(dto.getSignUpDate());
 
         return device;
     }
 
-    public static DeviceDTO map(Device device){
-        DeviceDTO deviceDTO = new DeviceDTO();
+    // ENTITY → DTO (GERAL + SERVICE ORDERS)
+    public static DeviceDTO map(Device device) {
+        DeviceDTO dto = new DeviceDTO();
 
+        dto.setId(device.getId());
+        dto.setOwnerid(device.getOwner().getId());
+        dto.setType(device.getType());
+        dto.setBrand(device.getBrand());
+        dto.setModel(device.getModel());
+        dto.setSerialNumber(device.getSerialNumber());
+        dto.setColor(device.getColor());
+        dto.setObservations(device.getObservations());
+        dto.setSignUpDate(device.getSignUpDate());
 
-        deviceDTO.setId(device.getId());
-        deviceDTO.setOwnerid(device.getOwnerId());
-        deviceDTO.setType(device.getType());
-        deviceDTO.setBrand(device.getBrand());
-        deviceDTO.setModel(device.getModel());
-        deviceDTO.setSerialNumber(device.getSerialNumber());
-        deviceDTO.setColor(device.getColor());
-        deviceDTO.setObservations(device.getObservations());
-        deviceDTO.setSignUpDate(device.getSignUpDate());
+        // Service Orders (se existir)
+        if (device.getSOs() != null) {
+            dto.setServiceOrders(
+                    device.getSOs()
+                            .stream()
+                            .map(ServiceOrderMapper::map)
+                            .collect(Collectors.toList())
+            );
+        }
 
-        return deviceDTO;
+        return dto;
     }
 }

@@ -29,20 +29,24 @@ public class DeviceService {
                     .collect(Collectors.toList());
     }
     //findbyid
-    public Device findDeviceByid(long id){
-        Optional<Device> thisdevice = deviceRepo.findById(id);
-        return  thisdevice.orElse(null);
+    public DeviceDTO findDeviceById(long id){
+        Device device = deviceRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Device não encontrado"));
+
+        return DeviceMapper.map(device);
     }
     //creatAdevice
-    public DeviceDTO createnewDevice(DeviceDTO newdevice, ClientUser client){
-        if (newdevice == null) {
-            return new DeviceDTO();
+    public DeviceDTO createnewDevice(DeviceDTO dto, ClientUser client) {
+        if (dto == null) {
+            return null;
         }
 
-       Device device = DeviceMapper.map(newdevice);
+        Device device = DeviceMapper.map(dto, client);
         device.setOwner(client);
-       deviceRepo.save(device);
-       return DeviceMapper.map(device);
+
+        Device saved = deviceRepo.save(device);
+
+        return DeviceMapper.map(saved);
     }
 
     //DeletDevice
@@ -52,22 +56,23 @@ public class DeviceService {
         }
     }
     //edit
-    public DeviceDTO editDevice(DeviceDTO dto, long id) {
+    public Device editDevice(DeviceDTO dto, long id) {
+
         Device device = deviceRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Device not found"));
 
-        device.setId(dto.getId());
+        // ❌ NÃO setar ID
         device.setType(dto.getType());
-        device.setSignUpDate(dto.getSignUpDate());
-        device.setOwner(dto.getOwner());
+        device.setBrand(dto.getBrand());
+        device.setModel(dto.getModel());
+        device.setSerialNumber(dto.getSerialNumber());
+        device.setColor(dto.getColor());
         device.setObservations(dto.getObservations());
+        device.setSignUpDate(dto.getSignUpDate());
 
-        // set outros campos editáveis aqui
+
 
         Device saved = deviceRepo.save(device);
-        return DeviceMapper.map(saved);
+        return saved;
     }
-
-
-
 }
