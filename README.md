@@ -7,18 +7,18 @@ A aplicação segue uma arquitetura em camadas, facilitando manutenção e escal
 
 ## 🚀 Tecnologias Utilizadas
 
-- ** Java **
+- **Java**
 
-- ** Spring Boot **
+- **Spring Boot**
 
-- ** Spring Web **
+- **Spring Web**
 
-- ** Spring Data JPA **
+- **Spring Data JPA**
 
-- ** Hibernate **
+- **Hibernate**
 
-- ** MySql **
-- ** Lombok **
+- **MySql**
+- **Lombok**
 
 ## 🧱 Arquitetura
 
