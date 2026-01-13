@@ -2,6 +2,7 @@ package Kani0dev.ATM.Service;
 
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.Device.ServiceOrder;
+import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
 import Kani0dev.ATM.Repository.SORepo;
 import org.springframework.stereotype.Service;
@@ -43,11 +44,15 @@ public class SOService {
         return serviceOrder;
     }
 
-    public ServiceOrder editSO(long so_id, ServiceOrder serviceOrder){
-            ServiceOrder thisService = ServiceOrderREPO.findById(so_id).get();
+    public ServiceOrder editSO(long deviceId,long so_id, ServiceOrder serviceOrder){
+            Optional <ServiceOrder> thisService = ServiceOrderREPO.findById(so_id);
 
-
-            thisService.setId(so_id);
-            return ServiceOrderREPO.save(serviceOrder);
+            if(thisService.isPresent()){
+                Device thisdevice = deviceRepo.findById(deviceId).get();
+                serviceOrder.setDevice_id(thisdevice);
+                serviceOrder.setId(so_id);
+                return ServiceOrderREPO.save(serviceOrder);
+            }
+            return  null;
     }
 }
