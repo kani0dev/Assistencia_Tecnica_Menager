@@ -1,44 +1,43 @@
-⚙️ Backend
-📌 Descrição
+# ⚙️ Backend
+## 📌 Descrição
 
 O Backend é uma API REST responsável por toda a regra de negócio do sistema. Ele gerencia dispositivos, ordens de serviço e seus estados, fornecendo endpoints para consumo pelo frontend.
 
 A aplicação segue uma arquitetura em camadas, facilitando manutenção e escalabilidade.
 
-🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias Utilizadas
 
-Java
+- ** Java **
 
-Spring Boot
+- ** Spring Boot **
 
-Spring Web
+- ** Spring Web **
 
-Spring Data JPA
+- ** Spring Data JPA **
 
-Hibernate
+- ** Hibernate **
 
-Banco de Dados Relacional (ex: PostgreSQL / MySQL)
+- ** MySql **
+- ** Lombok **
 
-Lombok
-
-🧱 Arquitetura
+## 🧱 Arquitetura
 
 O backend está organizado no padrão:
 
-Controller → Service → Repository → Model
+- Controller → Service → Repository → Model
 Camadas
 
-Controller: Exposição dos endpoints REST
+- Controller: Exposição dos endpoints REST
 
-Service: Regras de negócio
+- Service: Regras de negócio
 
-Repository: Acesso ao banco de dados
+- Repository: Acesso ao banco de dados
 
-Model: Entidades JPA
+- Model: Entidades JPA
 
-DTO: Transferência de dados entre camadas
+- DTO: Transferência de dados entre camadas
 
-📂 Estrutura de Pacotes (simplificada)
+## 📂 Estrutura de Pacotes (simplificada)
 Kani0dev.ATM
  ├── Controler
  │   ├── DeviceController
@@ -64,6 +63,7 @@ mvn clean install
 # Executar a aplicação
 mvn spring-boot:run
 
+# [Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)
 A API ficará disponível em:
 http://localhost:8080
 
