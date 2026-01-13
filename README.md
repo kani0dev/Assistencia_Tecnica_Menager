@@ -37,21 +37,6 @@ Camadas
 
 - DTO: Transferência de dados entre camadas
 
-## 📂 Estrutura de Pacotes (simplificada)
-Kani0dev.ATM
- ├── Controler
- │   ├── DeviceController
- │   └── SOController
- ├── Service
- │   ├── DeviceService
- │   └── SOService
- ├── Model
- │   ├── Device
- │   ├── ServiceOrder
- │   └── OS_State
- ├── DTO
- └── Repository
-
 
 ▶️ Como executar o Backend
 # buildar o cointainer docker
@@ -63,9 +48,8 @@ mvn clean install
 # Executar a aplicação
 mvn spring-boot:run
 
-# [Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)
 A API ficará disponível em:
-http://localhost:8080
-
- Observações Finais:
-Projeto desenvolvido com foco acadêmico e prático
+ http://localhost:8080
+Observações Finais:
+ Projeto desenvolvido com foco acadêmico e prático
+# [Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)
