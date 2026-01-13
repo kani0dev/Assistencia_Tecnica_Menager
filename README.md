@@ -39,14 +39,16 @@ Camadas
 
 
 ▶️ Como executar o Backend
-# buildar o cointainer docker
-docker compose up -d
-# Compilar o projeto
-mvn clean install
-
-
-# Executar a aplicação
-mvn spring-boot:run
+```bash
+ # buildar o cointainer docker
+ docker compose up -d
+ # Compilar o projeto
+ mvn clean install
+ 
+ 
+ # Executar a aplicação
+ mvn spring-boot:run
+```
 
 A API ficará disponível em:
  http://localhost:8080
