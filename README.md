@@ -49,7 +49,15 @@ Camadas
  # Executar a aplicação
  mvn spring-boot:run
 ```
-
+## .env
+este é so um prejeto de estudo entao a segurança nao tem que ser fechada completamente
+para o projeto rodar crie um arquivo com o nome ".env" na raiz do projeto e cole isso :
+```bash
+MYSQL_ROOT_PASSWORD =  'suamae'
+MYSQL_DATABASE =  'atm-db'
+MYSQL_USER =  'atm-db-adm'
+MYSQL_PASSWORD =  'xyz112233'
+```
 A API ficará disponível em:
  http://localhost:8080
 Observações Finais:
