@@ -52,12 +52,20 @@ Camadas
 ## .env
 este é so um prejeto de estudo entao a segurança nao tem que ser fechada completamente
 para o projeto rodar crie um arquivo com o nome ".env" na raiz do projeto e cole isso :
+
 ```bash
-MYSQL_ROOT_PASSWORD =  'suamae'
-MYSQL_DATABASE =  'atm-db'
-MYSQL_USER =  'atm-db-adm'
-MYSQL_PASSWORD =  'xyz112233'
-```
+spring.application.name=CONF-OK
+spring.datasource.url=jdbc:mysql://localhost:3306/atm-db
+
+spring.datasource.username=atm-db-adm
+spring.datasource.password=xyz112233
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+``` 
 A API ficará disponível em:
  http://localhost:8080
 Observações Finais:
