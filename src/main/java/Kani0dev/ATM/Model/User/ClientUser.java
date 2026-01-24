@@ -2,7 +2,9 @@ package Kani0dev.ATM.Model.User;
 
 import Kani0dev.ATM.Model.Device.Device;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Entity
 @Table(name = "Clients")
 @SuperBuilder
+@Getter
+@Setter
 public class ClientUser extends User {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
@@ -25,7 +29,6 @@ public class ClientUser extends User {
         this.deviceList.remove(device);
         device.setOwner(null);
     }
-    public Device getDevice(Device device){return  device;}
 
 
     public List<Device> getAllDevice(){
