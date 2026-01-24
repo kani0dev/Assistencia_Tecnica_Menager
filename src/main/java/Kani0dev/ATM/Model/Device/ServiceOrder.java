@@ -2,10 +2,7 @@ package Kani0dev.ATM.Model.Device;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
@@ -13,6 +10,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Entity
 @Getter @Setter
+@Builder
 //logic confusion -  the order service will be binded in the  client or to a device
 public class ServiceOrder {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

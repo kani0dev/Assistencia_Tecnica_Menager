@@ -3,52 +3,63 @@ package Kani0dev.ATM.Mapper;
 import Kani0dev.ATM.DTO.DeviceDTO;
 import Kani0dev.ATM.DTO.SODTO;
 import Kani0dev.ATM.Model.Device.Device;
+import Kani0dev.ATM.Model.Device.ServiceOrder;
 import Kani0dev.ATM.Model.User.ClientUser;
 
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 public class DeviceMapper {
 
     // DTO → ENTITY (CREATE)
-    public static Device map(DeviceDTO dto, ClientUser owner) {
-        Device device = new Device();
+    public static Device toEntity(DeviceDTO dto, ClientUser owner) {
 
-        device.setOwner(owner);
-        device.setType(dto.getType());
-        device.setBrand(dto.getBrand());
-        device.setModel(dto.getModel());
-        device.setSerialNumber(dto.getSerialNumber());
-        device.setColor(dto.getColor());
-        device.setObservations(dto.getObservations());
-        device.setSignUpDate(dto.getSignUpDate());
+
+        Device device = Device.builder()
+                .id(dto.getId())
+                .brand(dto.getBrand())
+                .model(dto.getModel())
+                .color(dto.getColor())
+                .type(dto.getType())
+                .observations(dto.getObservations())
+                .serialNumber(dto.getSerialNumber())
+                .signUpDate(dto.getSignUpDate())
+                .color(dto.getColor())
+                .owner(owner)
+                .build();
+
+        List<ServiceOrder> orders = Optional.ofNullable(dto.getServiceOrders())
+                .orElseGet(ArrayList::new)
+                .stream()
+                    .map(sodto -> ServiceOrderMapper.toEntity(sodto,device))
+                .toList();
+
+        device.setServiceorder(orders);
 
         return device;
     }
 
     // ENTITY → DTO (GERAL + SERVICE ORDERS)
-    public static DeviceDTO map(Device device) {
-        DeviceDTO dto = new DeviceDTO();
+    public static DeviceDTO toDto(Device device) {
 
-        dto.setId(device.getId());
-        dto.setOwnerid(device.getOwner().getId());
-        dto.setType(device.getType());
-        dto.setBrand(device.getBrand());
-        dto.setModel(device.getModel());
-        dto.setSerialNumber(device.getSerialNumber());
-        dto.setColor(device.getColor());
-        dto.setObservations(device.getObservations());
-        dto.setSignUpDate(device.getSignUpDate());
-
-        // Service Orders (se existir)
-        if (device.getSOs() != null) {
-            dto.setServiceOrders(
-                    device.getSOs()
-                            .stream()
-                            .map(ServiceOrderMapper::map)
-                            .collect(Collectors.toList())
-            );
-        }
-
-        return dto;
+        return DeviceDTO.builder()
+                .id(device.getId())
+                .ownerid(device.getOwnerId())
+                .type(device.getType())
+                .brand(device.getBrand())
+                .model(device.getModel())
+                .color(device.getColor())
+                .signUpDate(device.getSignUpDate())
+                .observations(device.getObservations())
+                .serialNumber(device.getSerialNumber())
+                .serviceOrders(
+                        device.getServiceorder()
+                        .stream()
+                        .map(ServiceOrderMapper::toDTO)
+                        .toList()
+                )
+                .build();
     }
 }

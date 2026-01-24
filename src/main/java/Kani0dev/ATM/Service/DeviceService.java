@@ -25,7 +25,7 @@ public class DeviceService {
     public List<DeviceDTO> getallDevices(){
             List<Device> devices = deviceRepo.findAll();
             return devices.stream()
-                    .map(DeviceMapper :: map)
+                    .map(DeviceMapper :: toDto)
                     .collect(Collectors.toList());
     }
     //findbyid
@@ -33,7 +33,7 @@ public class DeviceService {
         Device device = deviceRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Device não encontrado"));
 
-        return DeviceMapper.map(device);
+        return DeviceMapper.toDto(device);
     }
     //creatAdevice
     public DeviceDTO createnewDevice(DeviceDTO dto, ClientUser client) {
@@ -41,12 +41,12 @@ public class DeviceService {
             return null;
         }
 
-        Device device = DeviceMapper.map(dto, client);
+        Device device = DeviceMapper.toEntity(dto, client);
         device.setOwner(client);
 
         Device saved = deviceRepo.save(device);
 
-        return DeviceMapper.map(saved);
+        return DeviceMapper.toDto(saved);
     }
 
     //DeletDevice

@@ -90,8 +90,9 @@ public class ClienteService {
         ClientUser client = findtById(clientId);
         DeviceDTO dto = deviceService.findDeviceById(deviceId);
 
-        client.addDevice(DeviceMapper.map(dto,client));
-        Device device = DeviceMapper.map(dto,client);
+
+        Device device = DeviceMapper.toEntity(dto,client);
+        client.addDevice(device);
 
         ClientRepository.save(client);
         devicerepository.save(device);
@@ -103,7 +104,7 @@ public class ClienteService {
         ClientUser client  = findtById(client_id);
         DeviceDTO dto = deviceService.findDeviceById(device_id);
 
-        Device device = DeviceMapper.map(dto,client);
+        Device device = DeviceMapper.toEntity(dto,client);
         client.rmDevice(device);
 
         devicerepository.delete(device);

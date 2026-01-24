@@ -3,6 +3,7 @@ package Kani0dev.ATM.Model.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "devices")
 public class Device {
 
@@ -27,6 +29,7 @@ public class Device {
     private ClientUser owner;
 
     @OneToMany(mappedBy = "device_id",cascade = CascadeType.ALL)
+    @Column(nullable = true)
     private List<ServiceOrder> serviceorder = new ArrayList<>();
 
     public void addSO(ServiceOrder so){
