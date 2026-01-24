@@ -1,22 +1,13 @@
 package Kani0dev.ATM.Mapper;
 
 import Kani0dev.ATM.DTO.DeviceDTO;
-import Kani0dev.ATM.DTO.SODTO;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.Device.ServiceOrder;
 import Kani0dev.ATM.Model.User.ClientUser;
-
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 public class DeviceMapper {
-
-    // DTO → ENTITY (CREATE)
     public static Device toEntity(DeviceDTO dto, ClientUser owner) {
-
-
         Device device = Device.builder()
                 .id(dto.getId())
                 .brand(dto.getBrand())
@@ -40,10 +31,7 @@ public class DeviceMapper {
 
         return device;
     }
-
-    // ENTITY → DTO (GERAL + SERVICE ORDERS)
     public static DeviceDTO toDto(Device device) {
-
         return DeviceDTO.builder()
                 .id(device.getId())
                 .ownerid(device.getOwnerId())

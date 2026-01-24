@@ -13,10 +13,10 @@ import java.util.List;
 @Getter
 @Setter
 public class ClientDTO extends User {
-        private List<Long> deviceList = new ArrayList<>();
+        private List<Device> deviceList = new ArrayList<>();
         public void addDevice(Device device){
-        this.deviceList.add(device.getId());
+        this.deviceList.add(device);
     }
-        public void addDevices(List<Long> ids) { this.deviceList.addAll(ids);}
+        public void addDevices(List<Device> ids) { this.deviceList.addAll(ids);}
     }
 

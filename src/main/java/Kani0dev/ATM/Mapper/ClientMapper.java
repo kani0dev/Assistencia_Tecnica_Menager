@@ -1,28 +1,37 @@
 package Kani0dev.ATM.Mapper;
 
 import Kani0dev.ATM.DTO.ClientDTO;
+import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ClientMapper {
 
-    // Converte DTO (IDs) -> Entidade (Objetos)
-    public ClientUser map(ClientDTO dto) {
-        ClientUser client = new ClientUser();
-        client.setId(dto.getId());
-        client.setName(dto.getName());
-        client.setPassword(dto.getPassword());
-        client.setTelefone(dto.getTelefone());
-        client.setIsActive(dto.getIsActive());
+    public ClientUser toEntity(ClientDTO dto) {
+        ClientUser client = ClientUser.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .password(dto.getPassword())
+                .telefone(dto.getTelefone())
+                .isActive(dto.getIsActive())
+                .build();
 
-        return client;
+        List<Device> devices = Optional.ofNullable(dto.getDeviceList())
+                .orElseGet(ArrayList::new)
+                .stream()
+                .toList();
+
+        client.setDeviceList(devices);
+        return  client;
     }
 
     // Converte Entidade (Objetos) -> DTO (IDs)
-    public ClientDTO map(ClientUser entity) {
+    public ClientDTO toDTO(ClientUser entity) {
         ClientDTO dto = new ClientDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
@@ -32,9 +41,7 @@ public class ClientMapper {
 
         // Mapeia a lista de objetos Device para uma lista de Long (IDs)
         if (entity.getAllDevice() != null) {
-            List<Long> ids = entity.getAllDevice().stream()
-                    .map(device -> device.getId())
-                    .toList();
+            List<Device> ids = entity.getAllDevice().stream().toList();
             dto.addDevices(ids);
         }
 

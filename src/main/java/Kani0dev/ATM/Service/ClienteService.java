@@ -34,7 +34,7 @@ public class ClienteService {
     public List<ClientDTO> ListClientUsers(){
             List<ClientUser> clients = ClientRepository.findAll();
 
-            return clients.stream().map(clientMapper :: map).toList();
+            return clients.stream().map(clientMapper :: toDTO).toList();
     }
 
     //get by id
@@ -45,7 +45,7 @@ public class ClienteService {
 
     //add
     public ClientDTO SingUpClient(ClientDTO clientUser){
-        ClientUser client = clientMapper.map(clientUser);
+        ClientUser client = clientMapper.toEntity(clientUser);
         ClientRepository.save(client);
         return  clientUser;
     }
