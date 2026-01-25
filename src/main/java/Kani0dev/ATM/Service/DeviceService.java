@@ -7,6 +7,7 @@ import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +44,7 @@ public class DeviceService {
 
         Device device = DeviceMapper.toEntity(dto, client);
         device.setOwner(client);
+        device.setSignUpDate(LocalDate.now().toString());
 
         Device saved = deviceRepo.save(device);
 
