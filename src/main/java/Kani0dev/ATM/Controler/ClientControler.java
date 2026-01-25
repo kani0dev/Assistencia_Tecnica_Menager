@@ -1,10 +1,15 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.Controler.Output.ClientResponse;
 import Kani0dev.ATM.DTO.ClientDTO;
+import Kani0dev.ATM.Mapper.ClientMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.ClienteService;
 import ch.qos.logback.core.net.server.Client;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,30 +17,34 @@ import java.util.List;
 @RestController
 @RequestMapping("/clients")
 @CrossOrigin(origins = "*",  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-
 public class ClientControler {
     private final ClienteService serviceClient;
+    private final ClientMapper mapper;
 
-    public ClientControler(ClienteService clienteService) {
+    public ClientControler(ClienteService clienteService, ClientMapper mapper) {
         this.serviceClient = clienteService;
+        this.mapper = mapper;
     }
 
-    @GetMapping("/")
-    public String Test(){return "chegamos";}
-
     @GetMapping("/list")
-    public List<ClientDTO> ShowAllClients(){
-        return serviceClient.ListClientUsers();
+    public ResponseEntity<List<ClientResponse>> ShowAllClients(){
+        List<ClientResponse> reponses = serviceClient.ListClientUsers().stream().map(ClientResponse::toResponse).toList();
+        return ResponseEntity.ok(reponses);
     }
 
     @GetMapping("/list/{id}")
-    public ClientUser ShowClientById(@PathVariable long id){
-        return serviceClient.findtById(id);
+    public ResponseEntity<ClientResponse>  ShowClientById(@PathVariable long id){
+        ClientUser clientUser = serviceClient.findtById(id);
+        ClientDTO dto = mapper.toDTO(clientUser);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ClientResponse.toResponse(dto));
     }
 
     @PostMapping("/add")
-    public ClientDTO AddNewCLient(@RequestBody ClientDTO client){
-        return  serviceClient.SingUpClient(client);
+    public ResponseEntity<ClientDTO>  AddNewCLient(@RequestBody ClientDTO client){
+        ClientDTO dto = serviceClient.SingUpClient(client);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @DeleteMapping("/remove/{id}")
@@ -46,17 +55,20 @@ public class ClientControler {
     //soft delet
 
     @PutMapping("/deactivate/{id}")
-    public ClientUser DeactiveClient(@PathVariable long id){
-        return serviceClient.deactivate(id,false);
+    public ResponseEntity<ClientUser> DeactiveClient(@PathVariable long id){
+        ClientUser deactivate = serviceClient.deactivate(id, false);
+        return ResponseEntity.ok(deactivate);
     }
     @PutMapping("/activate/{id}")
-    public ClientUser ActivateClient(@PathVariable long id){
-        return  serviceClient.activate(id,true);
+    public ResponseEntity<ClientUser> ActivateClient(@PathVariable long id){
+        ClientUser activate = serviceClient.activate(id, true);
+        return  ResponseEntity.ok(activate);
     }
 
     @PutMapping("/edit/{id}")
-    public ClientUser AlterClient(@PathVariable long id,@RequestBody ClientUser client){
-        return serviceClient.UpdateClient(client,id);
+    public ResponseEntity< ClientUser> AlterClient(@PathVariable long id,@RequestBody ClientUser client){
+        ClientUser clientUser = serviceClient.UpdateClient(client, id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(clientUser);
     }
 
     // devices methods;
