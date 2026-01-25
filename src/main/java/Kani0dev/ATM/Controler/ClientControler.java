@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.Controler.Output.ClientResponse;
 import Kani0dev.ATM.DTO.ClientDTO;
 import Kani0dev.ATM.Mapper.ClientMapper;
 import Kani0dev.ATM.Model.Device.Device;
@@ -26,15 +27,18 @@ public class ClientControler {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<ClientDTO>> ShowAllClients(){
-        return ResponseEntity.ok(serviceClient.ListClientUsers());
+    public ResponseEntity<List<ClientResponse>> ShowAllClients(){
+        List<ClientResponse> reponses = serviceClient.ListClientUsers().stream().map(ClientResponse::toResponse).toList();
+        return ResponseEntity.ok(reponses);
     }
 
     @GetMapping("/list/{id}")
-    public ResponseEntity<ClientDTO>  ShowClientById(@PathVariable long id){
+    public ResponseEntity<ClientResponse>  ShowClientById(@PathVariable long id){
         ClientUser clientUser = serviceClient.findtById(id);
         ClientDTO dto = mapper.toDTO(clientUser);
-        return ResponseEntity.status(HttpStatus.OK).body(dto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ClientResponse.toResponse(dto));
     }
 
     @PostMapping("/add")
