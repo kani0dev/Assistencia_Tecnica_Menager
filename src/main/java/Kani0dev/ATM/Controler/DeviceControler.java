@@ -1,5 +1,6 @@
 package Kani0dev.ATM.Controler;
 
+import Kani0dev.ATM.Controler.Output.DeviceResponse;
 import Kani0dev.ATM.DTO.DeviceDTO;
 import Kani0dev.ATM.Mapper.DeviceMapper;
 import Kani0dev.ATM.Model.Device.Device;
@@ -26,7 +27,10 @@ public class DeviceControler {
     }
 
     @GetMapping("/list")
-    public List<DeviceDTO> getalldevices(){    return serviceDevice.getallDevices();   }
+    public List<DeviceResponse> getalldevices(){
+
+        return serviceDevice.getallDevices();
+    }
 
     @GetMapping("/list/{id}")
     public DeviceDTO findDeviceByid(@PathVariable long id){    return serviceDevice.findDeviceById(id);  }
