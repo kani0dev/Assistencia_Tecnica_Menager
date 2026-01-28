@@ -8,6 +8,7 @@ import java.util.List;
 
 @Builder
 public record ClientResponse(
+        Long id,
         String name,
         String telefone,
         Boolean isActive,
@@ -15,6 +16,7 @@ public record ClientResponse(
 ) {
     public static ClientResponse toResponse(ClientDTO client) {
         return  ClientResponse.builder()
+                .id(client.getId())
                 .name(client.getName())
                 .telefone(client.getTelefone())
                 .isActive(client.getIsActive())

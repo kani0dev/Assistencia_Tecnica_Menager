@@ -7,6 +7,7 @@ import Kani0dev.ATM.Repository.DeviceRepo;
 import Kani0dev.ATM.Repository.SORepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,12 @@ public class SOService {
         device.ifPresent(value -> value.addSO(serviceorder));
 
         serviceorder.setDevice_id(device.get());
+
+        if (serviceorder.getEntry_date() == null) {
+            serviceorder.setEntry_date(LocalDateTime.now().toString());
+        } else {
+            serviceorder.setEntry_date(serviceorder.getEntry_date());
+        }
 
         ServiceOrderREPO.save(serviceorder);
         return  device.get().getServiceorder();
