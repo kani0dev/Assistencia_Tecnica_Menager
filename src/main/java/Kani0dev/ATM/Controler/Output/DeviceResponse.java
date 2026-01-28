@@ -8,6 +8,7 @@ import java.util.List;
 
 @Builder
 public record DeviceResponse (
+        Long id,
          Long ownerid ,
          String type,
          String brand,
@@ -20,6 +21,7 @@ public record DeviceResponse (
 ){
     public static DeviceResponse toResponse(DeviceDTO dto){
         return  DeviceResponse.builder()
+                .id(dto.getId())
                 .ownerid(dto.getOwnerid())
                 .type(dto.getType())
                 .brand(dto.getBrand())
