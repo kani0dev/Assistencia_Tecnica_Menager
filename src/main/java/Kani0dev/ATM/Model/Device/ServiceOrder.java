@@ -11,6 +11,7 @@ import java.util.UUID;
 @Entity
 @Getter @Setter
 @Builder
+@Table(name = "service_order")
 //logic confusion -  the order service will be binded in the  client or to a device
 public class ServiceOrder {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
