@@ -16,7 +16,7 @@ services:
       - mysql_data:/var/lib/mysql
 
   app:
-    image: eclipse-temurin:21-jre
+    image: maven:3.9-eclipse-temurin-21
     container_name: atm-app
     depends_on:
       mysql:
@@ -24,21 +24,18 @@ services:
     env_file:
       - .env
     environment:
+      MYSQL_HOST: mysql
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_HOST: mysql
-      SPRING_PROFILES_ACTIVE: dev
     ports:
       - "8080:8080"
     volumes:
-      - ./target/app.jar:/app/app.jar
-      - ./target/classes:/app/classes
+      - .:/app
+      - m2_cache:/root/.m2
     working_dir: /app
-    command: >
-      sh -c "java -cp /app/app.jar:/app/classes
-      -Dloader.path=/app/classes
-      org.springframework.boot.loader.launch.JarLauncher"
+    command: mvn spring-boot:run
 
 volumes:
   mysql_data:
+  m2_cache:
