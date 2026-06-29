@@ -13,30 +13,32 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
-      
-  app: 
-    image: eclipse-temurin:21-jre 
-    container_name: atm-app 
+      - mysql_data:/var/lib/mysql
+
+  app:
+    image: eclipse-temurin:21-jre
+    container_name: atm-app
     depends_on:
       mysql:
         condition: service_started
     env_file:
       - .env
-
     environment:
-        MYSQL_USER: ${MYSQL_USER}
-        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-        MYSQL_DATABASE: ${MYSQL_NAME}
-        SPRING_PROFILES_ACTIVE: dev
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: mysql
+      SPRING_PROFILES_ACTIVE: dev
     ports:
-    - "8080:8080"
-
+      - "8080:8080"
     volumes:
-     - ./target/app.jar:/app/app.jar
-     - ./target/classes:/app/classes
+      - ./target/app.jar:/app/app.jar
+      - ./target/classes:/app/classes
     working_dir: /app
-    command: > 
+    command: >
       sh -c "java -cp /app/app.jar:/app/classes
       -Dloader.path=/app/classes
       org.springframework.boot.loader.launch.JarLauncher"
+
+volumes:
+  mysql_data:
