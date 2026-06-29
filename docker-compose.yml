@@ -13,4 +13,29 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - ./setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - mysql_data:/var/lib/mysql
+
+  app:
+    image: maven:3.9-eclipse-temurin-21
+    container_name: atm-app
+    depends_on:
+      mysql:
+        condition: service_started
+    env_file:
+      - .env
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - m2_cache:/root/.m2
+    working_dir: /app
+    command: mvn spring-boot:run
+
+volumes:
+  mysql_data:
+  m2_cache:
