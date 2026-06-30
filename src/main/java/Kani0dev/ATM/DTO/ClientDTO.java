@@ -12,6 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+// isso ta ''errado'' , o dto é uma representaçao estatica de um objeto ele é uma simples abstraçao
+// quando ele estende ou herda algo ele tambem recebe as prorpriedades dessa classe
+// nesse caso aq por extender o user ele tambem ganha propriedades das notations de User oque é contra design.
 public class ClientDTO extends User {
         private List<Device> deviceList = new ArrayList<>();
         public void addDevice(Device device){

@@ -2,12 +2,15 @@ package Kani0dev.ATM.Controler;
 
 import Kani0dev.ATM.Model.Device.ServiceOrder;
 import Kani0dev.ATM.Service.SOService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-@RestController @RequestMapping("/device/so/")
+@RestController
+@RequestMapping("/device/so/")
+@PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")
 public class SOControler {
 
     private final SOService serviceSO;
