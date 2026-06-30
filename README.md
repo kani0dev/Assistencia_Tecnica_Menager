@@ -1,73 +1,142 @@
-# ⚙️ Backend
+# ⚙️ Assistência Técnica Manager — Backend
+
 ## 📌 Descrição
 
-O Backend é uma API REST responsável por toda a regra de negócio do sistema. Ele gerencia dispositivos, ordens de serviço e seus estados, fornecendo endpoints para consumo pelo frontend.
+API REST para gerenciamento de assistência técnica. Gerencia clientes, dispositivos e ordens de serviço, com autenticação Basic Auth para técnicos.
 
-A aplicação segue uma arquitetura em camadas, facilitando manutenção e escalabilidade.
+## 🚀 Tecnologias
 
-## 🚀 Tecnologias Utilizadas
+- Java 21 + Spring Boot 4.0
+- Spring Web, Spring Data JPA, Spring Security
+- MySQL 8.0 + Flyway
+- Lombok
+- Docker Compose
 
-- **Java**
+## 🧱 Estrutura do Projeto
 
-- **Spring Boot**
-
-- **Spring Web**
-
-- **Spring Data JPA**
-
-- **Hibernate**
-
-- **MySql**
-- **Lombok**
-
-## 🧱 Arquitetura
-
-O backend está organizado no padrão:
-
-- Controller → Service → Repository → Model
-Camadas
-
-- Controller: Exposição dos endpoints REST
-
-- Service: Regras de negócio
-
-- Repository: Acesso ao banco de dados
-
-- Model: Entidades JPA
-
-- DTO: Transferência de dados entre camadas
-
-
-▶️ Como executar o Backend
-```bash
- # buildar o cointainer docker
- docker compose up -d
- # Compilar o projeto
- mvn clean install
- 
- 
- # Executar a aplicação
- mvn spring-boot:run
 ```
-## .env
-este é so um prejeto de estudo entao a segurança nao tem que ser fechada completamente
-para o projeto rodar crie um arquivo com o nome ".env" na raiz do projeto e cole isso :
+src/main/java/Kani0dev/ATM/
+├── Config/
+│   └── Security.java              # Spring Security (Basic Auth, BCrypt, @EnableMethodSecurity)
+├── Controler/
+│   ├── AuthController.java        # /auth/register, /auth/me
+│   ├── ClientControler.java       # /clients/**
+│   ├── DeviceControler.java       # /device/**
+│   ├── SOControler.java           # /device/so/**
+│   └── Output/
+│       ├── ClientResponse.java    # Response DTOs
+│       └── DeviceResponse.java
+├── DTO/
+│   ├── ClientDTO.java
+│   ├── DeviceDTO.java
+│   ├── SODTO.java
+│   └── RegisterRequest.java
+├── Mapper/
+│   ├── ClientMapper.java
+│   ├── DeviceMapper.java
+│   └── ServiceOrderMapper.java
+├── Model/
+│   ├── User/
+│   │   ├── User.java              # Entidade abstrata base (users table)
+│   │   ├── ClientUser.java        # Cliente (não faz login)
+│   │   ├── TechnicianUser.java    # Técnico (faz login)
+│   │   └── Role.java              # CLIENT | TECHNICIAN | ADMIN
+│   └── Device/
+│       ├── Device.java
+│       └── ServiceOrder.java
+├── Repository/
+│   ├── ClientRepo.java
+│   ├── DeviceRepo.java
+│   ├── SORepo.java
+│   └── TechnicianRepo.java
+└── Service/
+    ├── ClienteService.java
+    ├── DeviceService.java
+    ├── SOService.java
+    └── UserDetailsServiceImpl.java  # Carrega TechnicianUser para autenticação
+```
+
+## 📦 Endpoints
+
+### Autenticação (`/auth`)
+| Método | Rota | Descrição | Acesso |
+|--------|------|-----------|--------|
+| POST | `/auth/register` | Registrar novo técnico | Público |
+| GET | `/auth/me` | Dados do usuário autenticado | Autenticado |
+
+### Clientes (`/clients`)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/clients/list` | Listar todos os clientes |
+| GET | `/clients/list/{id}` | Buscar cliente por ID |
+| POST | `/clients/add` | Criar novo cliente |
+| DELETE | `/clients/remove/{id}` | Excluir cliente (hard delete) |
+| PUT | `/clients/deactivate/{id}` | Desativar cliente |
+| PUT | `/clients/activate/{id}` | Ativar cliente |
+| PUT | `/clients/edit/{id}` | Editar cliente |
+| POST | `/clients/add-device/{client_id}@{device_id}` | Vincular dispositivo a cliente |
+| DELETE | `/clients/rm-device/{client_id}@{device_id}` | Desvincular dispositivo |
+| GET | `/clients/get-device/{client_id}` | Listar dispositivos do cliente |
+
+### Dispositivos (`/device`)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/device/list` | Listar todos os dispositivos |
+| GET | `/device/list/{id}` | Buscar dispositivo por ID |
+| POST | `/device/add-to/{clientId}` | Adicionar dispositivo a um cliente |
+| DELETE | `/device/rm/{id}` | Excluir dispositivo |
+| PUT | `/device/edit/{id}` | Editar dispositivo |
+
+### Ordens de Serviço (`/device/so/`)
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/device/so/list/{device_id}` | Listar OS de um dispositivo |
+| POST | `/device/so/add/{device_id}` | Adicionar OS a um dispositivo |
+| DELETE | `/device/so/rm/{device_id}@{so_id}` | Remover OS |
+| PUT | `/device/so/edit/{deviceId}@{so_id}` | Editar OS |
+
+> Endpoints de clientes, dispositivos e OS exigem `@PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")`.
+
+## 🔐 Autenticação
+
+- **Tipo:** HTTP Basic Auth
+- **Senhas:** hasheadas com BCrypt
+- **Roles:** `TECHNICIAN`, `ADMIN`
+- `ClientUser` (cliente) **não faz login** — é apenas um registro de cliente
+
+### Registrar técnico
+```bash
+curl -X POST http://localhost:8080/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"tecnico1","password":"123456","role":"TECHNICIAN"}'
+```
+
+### Usar nas requisições
+```bash
+curl -u tecnico1:123456 http://localhost:8080/clients/list
+```
+
+## 🐳 Como executar
 
 ```bash
-spring.application.name=CONF-OK
-spring.datasource.url=jdbc:mysql://localhost:3306/atm-db
+docker compose up -d
+./mvnw clean install
+./mvnw spring-boot:run
+```
 
-spring.datasource.username=atm-db-adm
-spring.datasource.password=xyz112233
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+A API fica em: `http://localhost:8080`
 
+## .env
 
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
-spring.jpa.properties.hibernate.format_sql=true
-``` 
-A API ficará disponível em:
- http://localhost:8080
-Observações Finais:
- Projeto desenvolvido com foco acadêmico e prático
-# [Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)
+Crie um arquivo `.env` na raiz:
+
+```bash
+MYSQL_HOST=localhost
+MYSQL_DATABASE=atm-db
+MYSQL_USER=atm-db-adm
+MYSQL_PASSWORD=xyz112233
+```
+
+## 🔗 Frontend
+
+Repositório: [Assistencia_Tecnica_Menager_Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)
