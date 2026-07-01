@@ -32,7 +32,10 @@ build/
 
 
 .vscode/
+.idea/
+.vim/
+.mvn
 /Documentation
 
 
-.env
+**.env

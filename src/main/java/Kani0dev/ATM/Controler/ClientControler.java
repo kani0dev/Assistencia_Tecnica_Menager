@@ -6,7 +6,6 @@ import Kani0dev.ATM.Mapper.ClientMapper;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Service.ClienteService;
-import ch.qos.logback.core.net.server.Client;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/clients")
-@CrossOrigin(origins = "*",  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*",  methods = { RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.PATCH})
 @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")
 public class ClientControler {
     private final ClienteService serviceClient;
@@ -28,13 +28,13 @@ public class ClientControler {
         this.mapper = mapper;
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<List<ClientResponse>> ShowAllClients(){
         List<ClientResponse> reponses = serviceClient.ListClientUsers().stream().map(ClientResponse::toResponse).toList();
         return ResponseEntity.ok(reponses);
     }
 
-    @GetMapping("/list/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ClientResponse>  ShowClientById(@PathVariable long id){
         ClientUser clientUser = serviceClient.findtById(id);
         ClientDTO dto = mapper.toDTO(clientUser);
@@ -43,50 +43,44 @@ public class ClientControler {
                 .body(ClientResponse.toResponse(dto));
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<ClientDTO>  AddNewCLient(@RequestBody ClientDTO client){
         ClientDTO dto = serviceClient.SingUpClient(client);
         return  ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
-    @DeleteMapping("/remove/{id}")
-    //hard delet
+    @DeleteMapping("/{id}")
     public void DeletClient(@PathVariable long id){
         serviceClient.HardDelet(id);
     }
-    //soft delet
 
-    @PutMapping("/deactivate/{id}")
-    public ResponseEntity<ClientUser> DeactiveClient(@PathVariable long id){
-        ClientUser deactivate = serviceClient.deactivate(id, false);
-        return ResponseEntity.ok(deactivate);
-    }
-    @PutMapping("/activate/{id}")
-    public ResponseEntity<ClientUser> ActivateClient(@PathVariable long id){
-        ClientUser activate = serviceClient.activate(id, true);
-        return  ResponseEntity.ok(activate);
+    @PatchMapping("/{id}")
+    public ResponseEntity<ClientUser> toggleClientActive(@PathVariable long id, @RequestBody Map<String, Boolean> body){
+        boolean active = body.getOrDefault("active", true);
+        ClientUser updated = serviceClient.setActiveStatus(id, active);
+        return ResponseEntity.ok(updated);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity< ClientUser> AlterClient(@PathVariable long id,@RequestBody ClientUser client){
+    @PutMapping("/{id}")
+    public ResponseEntity<ClientUser> AlterClient(@PathVariable long id, @RequestBody ClientUser client){
         ClientUser clientUser = serviceClient.UpdateClient(client, id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(clientUser);
     }
 
-    // devices methods;
+    // devices sub-resources
 
-    @PostMapping("/add-device/{client_id}@{device_id}")
-    public ClientUser AddDevicetoClient(@PathVariable long client_id, @PathVariable long device_id){
-        return serviceClient.addExistentDevice(client_id,device_id);
+    @PostMapping("/{clientId}/devices/{deviceId}")
+    public ClientUser AddDevicetoClient(@PathVariable long clientId, @PathVariable long deviceId){
+        return serviceClient.addExistentDevice(clientId, deviceId);
     }
 
-    @DeleteMapping("/rm-device/{client_id}@{device_id}")
-    public ClientUser removeDevice(@PathVariable long client_id, @PathVariable long device_id){
-        return serviceClient.removeADevice(client_id,device_id);
+    @DeleteMapping("/{clientId}/devices/{deviceId}")
+    public ClientUser removeDevice(@PathVariable long clientId, @PathVariable long deviceId){
+        return serviceClient.removeADevice(clientId, deviceId);
     }
 
-    @GetMapping("/get-device/{client_id}")
-    public List<Device> SeeDevices(@PathVariable long client_id){
-        return serviceClient.seeAllDevices(client_id);
+    @GetMapping("/{clientId}/devices")
+    public List<Device> SeeDevices(@PathVariable long clientId){
+        return serviceClient.seeAllDevices(clientId);
     }
 }

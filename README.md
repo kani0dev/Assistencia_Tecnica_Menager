@@ -21,8 +21,8 @@ src/main/java/Kani0dev/ATM/
 ├── Controler/
 │   ├── AuthController.java        # /auth/register, /auth/me
 │   ├── ClientControler.java       # /clients/**
-│   ├── DeviceControler.java       # /device/**
-│   ├── SOControler.java           # /device/so/**
+│   ├── DeviceControler.java       # /devices/**
+│   ├── SOControler.java           # /service-orders/**
 │   └── Output/
 │       ├── ClientResponse.java    # Response DTOs
 │       └── DeviceResponse.java
@@ -62,40 +62,124 @@ src/main/java/Kani0dev/ATM/
 | Método | Rota | Descrição | Acesso |
 |--------|------|-----------|--------|
 | POST | `/auth/register` | Registrar novo técnico | Público |
-| GET | `/auth/me` | Dados do usuário autenticado | Autenticado |
 
 ### Clientes (`/clients`)
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| GET | `/clients/list` | Listar todos os clientes |
-| GET | `/clients/list/{id}` | Buscar cliente por ID |
-| POST | `/clients/add` | Criar novo cliente |
-| DELETE | `/clients/remove/{id}` | Excluir cliente (hard delete) |
-| PUT | `/clients/deactivate/{id}` | Desativar cliente |
-| PUT | `/clients/activate/{id}` | Ativar cliente |
-| PUT | `/clients/edit/{id}` | Editar cliente |
-| POST | `/clients/add-device/{client_id}@{device_id}` | Vincular dispositivo a cliente |
-| DELETE | `/clients/rm-device/{client_id}@{device_id}` | Desvincular dispositivo |
-| GET | `/clients/get-device/{client_id}` | Listar dispositivos do cliente |
+| GET | `/clients` | Listar todos os clientes |
+| GET | `/clients/{id}` | Buscar cliente por ID |
+| POST | `/clients` | Criar novo cliente |
+| DELETE | `/clients/{id}` | Excluir cliente (hard delete) |
+| PATCH | `/clients/{id}` | Ativar/desativar cliente (body: `{"active": true/false}`) |
+| PUT | `/clients/{id}` | Editar cliente |
+| POST | `/clients/{clientId}/devices/{deviceId}` | Vincular dispositivo existente a cliente |
+| DELETE | `/clients/{clientId}/devices/{deviceId}` | Desvincular dispositivo |
+| GET | `/clients/{clientId}/devices` | Listar dispositivos do cliente |
 
-### Dispositivos (`/device`)
+### Dispositivos (`/devices`)
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| GET | `/device/list` | Listar todos os dispositivos |
-| GET | `/device/list/{id}` | Buscar dispositivo por ID |
-| POST | `/device/add-to/{clientId}` | Adicionar dispositivo a um cliente |
-| DELETE | `/device/rm/{id}` | Excluir dispositivo |
-| PUT | `/device/edit/{id}` | Editar dispositivo |
+| GET | `/devices` | Listar todos os dispositivos |
+| GET | `/devices/{id}` | Buscar dispositivo por ID |
+| POST | `/devices` | Adicionar dispositivo (enviar `ownerid` no body) |
+| DELETE | `/devices/{id}` | Excluir dispositivo |
+| PUT | `/devices/{id}` | Editar dispositivo |
 
-### Ordens de Serviço (`/device/so/`)
+### Ordens de Serviço (`/service-orders`)
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| GET | `/device/so/list/{device_id}` | Listar OS de um dispositivo |
-| POST | `/device/so/add/{device_id}` | Adicionar OS a um dispositivo |
-| DELETE | `/device/so/rm/{device_id}@{so_id}` | Remover OS |
-| PUT | `/device/so/edit/{deviceId}@{so_id}` | Editar OS |
+| GET | `/service-orders?deviceId={id}` | Listar OS (opcional: filtrar por dispositivo) |
+| POST | `/service-orders?deviceId={id}` | Adicionar OS a um dispositivo |
+| DELETE | `/service-orders/{soId}` | Remover OS |
+| PUT | `/service-orders/{soId}?deviceId={id}` | Editar OS |
 
 > Endpoints de clientes, dispositivos e OS exigem `@PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")`.
+
+## 📥 Exemplos de Requisição
+
+### Autenticação
+```bash
+curl -X POST http://localhost:8080/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"tecnico1","password":"123456","role":"TECHNICIAN"}'
+```
+
+### Clientes
+```bash
+# Criar cliente
+curl -u tecnico1:123456 -X POST http://localhost:8080/clients \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João","telefone":"11999999999","isActive":true}'
+
+# Listar todos
+curl -u tecnico1:123456 http://localhost:8080/clients
+
+# Buscar por ID
+curl -u tecnico1:123456 http://localhost:8080/clients/1
+
+# Ativar/desativar cliente
+curl -u tecnico1:123456 -X PATCH http://localhost:8080/clients/1 \
+  -H "Content-Type: application/json" \
+  -d '{"active":false}'
+
+# Editar cliente
+curl -u tecnico1:123456 -X PUT http://localhost:8080/clients/1 \
+  -H "Content-Type: application/json" \
+  -d '{"name":"João Editado","telefone":"11988888888","isActive":true}'
+
+# Excluir cliente
+curl -u tecnico1:123456 -X DELETE http://localhost:8080/clients/1
+
+# Vincular dispositivo existente a cliente
+curl -u tecnico1:123456 -X POST http://localhost:8080/clients/1/devices/2
+
+# Desvincular dispositivo
+curl -u tecnico1:123456 -X DELETE http://localhost:8080/clients/1/devices/2
+
+# Listar dispositivos do cliente
+curl -u tecnico1:123456 http://localhost:8080/clients/1/devices
+```
+
+### Dispositivos
+```bash
+# Criar dispositivo
+curl -u tecnico1:123456 -X POST http://localhost:8080/devices \
+  -H "Content-Type: application/json" \
+  -d '{"type":"Smartphone","brand":"Samsung","model":"S24","serialNumber":"SN123","color":"Preto","observations":"Tela trincada","ownerid":1}'
+
+# Listar todos
+curl -u tecnico1:123456 http://localhost:8080/devices
+
+# Buscar por ID
+curl -u tecnico1:123456 http://localhost:8080/devices/1
+
+# Editar dispositivo
+curl -u tecnico1:123456 -X PUT http://localhost:8080/devices/1 \
+  -H "Content-Type: application/json" \
+  -d '{"type":"Smartphone","brand":"Samsung","model":"S24 Ultra","serialNumber":"SN123","color":"Preto","observations":"Tela trincada e bateria","ownerid":1}'
+
+# Excluir dispositivo
+curl -u tecnico1:123456 -X DELETE http://localhost:8080/devices/1
+```
+
+### Ordens de Serviço
+```bash
+# Criar OS para um dispositivo (entry_date é gerado automaticamente)
+curl -u tecnico1:123456 -X POST "http://localhost:8080/service-orders?deviceId=1" \
+  -H "Content-Type: application/json" \
+  -d '{"curent_State":"Aguardando","status":"ABERTA","defect_reported":"Não liga","service_description":"Troca de bateria","warranty_period":"90 dias"}'
+
+# Listar OS (todas ou filtrar por dispositivo)
+curl -u tecnico1:123456 "http://localhost:8080/service-orders?deviceId=1"
+
+# Editar OS
+curl -u tecnico1:123456 -X PUT "http://localhost:8080/service-orders/1?deviceId=1" \
+  -H "Content-Type: application/json" \
+  -d '{"curent_State":"Em andamento","status":"EM_REPARO","defect_reported":"Não liga","service_description":"Troca de bateria","warranty_period":"90 dias"}'
+
+# Excluir OS
+curl -u tecnico1:123456 -X DELETE http://localhost:8080/service-orders/1
+```
 
 ## 🔐 Autenticação
 
@@ -104,16 +188,9 @@ src/main/java/Kani0dev/ATM/
 - **Roles:** `TECHNICIAN`, `ADMIN`
 - `ClientUser` (cliente) **não faz login** — é apenas um registro de cliente
 
-### Registrar técnico
-```bash
-curl -X POST http://localhost:8080/auth/register \
-  -H "Content-Type: application/json" \
-  -d '{"name":"tecnico1","password":"123456","role":"TECHNICIAN"}'
-```
-
 ### Usar nas requisições
 ```bash
-curl -u tecnico1:123456 http://localhost:8080/clients/list
+curl -u tecnico1:123456 http://localhost:8080/clients
 ```
 
 ## 🐳 Como executar

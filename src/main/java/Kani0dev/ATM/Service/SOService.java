@@ -2,7 +2,6 @@ package Kani0dev.ATM.Service;
 
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.Device.ServiceOrder;
-import Kani0dev.ATM.Model.User.ClientUser;
 import Kani0dev.ATM.Repository.DeviceRepo;
 import Kani0dev.ATM.Repository.SORepo;
 import org.springframework.stereotype.Service;
@@ -21,45 +20,49 @@ public class SOService {
         this.deviceRepo = deviceRepo;
     }
 
-    public List<ServiceOrder> gettAllSOFromDevice(long device_id){
-        Device thisdevice = deviceRepo.findById(device_id).get();
-        return  thisdevice.getSOs();
+    public List<ServiceOrder> gettAllSOFromDevice(Long deviceId){
+        if (deviceId != null) {
+            return ServiceOrderREPO.findByDevice_Id(deviceId);
+        }
+        return ServiceOrderREPO.findAll();
     }
 
-    public List<ServiceOrder> addServiceTODevice(long device_id, ServiceOrder serviceorder){
-        Optional<Device> device = deviceRepo.findById(device_id);
+    public List<ServiceOrder> addServiceTODevice(long deviceId, ServiceOrder serviceorder){
+        Device device = deviceRepo.findById(deviceId)
+                .orElseThrow(() -> new RuntimeException("Device not found"));
 
-        device.ifPresent(value -> value.addSO(serviceorder));
+        device.addSO(serviceorder);
 
-        serviceorder.setDevice_id(device.get());
+        serviceorder.setDevice_id(device);
 
         if (serviceorder.getEntry_date() == null) {
             serviceorder.setEntry_date(LocalDateTime.now().toString());
-        } else {
-            serviceorder.setEntry_date(serviceorder.getEntry_date());
         }
 
         ServiceOrderREPO.save(serviceorder);
-        return  device.get().getServiceorder();
+        return device.getServiceorder();
     }
 
-    public ServiceOrder rmServiceFromDevice(long device_id, long so_id){
-        ServiceOrder serviceOrder = ServiceOrderREPO.findById(so_id).get();
-        Device device = deviceRepo.findById(device_id).get();
-        device.rmSo(serviceOrder);
+    public void rmServiceFromDevice(long soId){
+        ServiceOrder serviceOrder = ServiceOrderREPO.findById(soId)
+                .orElseThrow(() -> new RuntimeException("Service order not found"));
+        Device device = serviceOrder.getDevice_id();
+        if (device != null) {
+            device.rmSo(serviceOrder);
+        }
         ServiceOrderREPO.delete(serviceOrder);
-        return serviceOrder;
     }
 
-    public ServiceOrder editSO(long deviceId,long so_id, ServiceOrder serviceOrder){
-            Optional <ServiceOrder> thisService = ServiceOrderREPO.findById(so_id);
+    public ServiceOrder editSO(long soId, long deviceId, ServiceOrder serviceOrder){
+        Optional<ServiceOrder> thisService = ServiceOrderREPO.findById(soId);
 
-            if(thisService.isPresent()){
-                Device thisdevice = deviceRepo.findById(deviceId).get();
-                serviceOrder.setDevice_id(thisdevice);
-                serviceOrder.setId(so_id);
-                return ServiceOrderREPO.save(serviceOrder);
-            }
-            return  null;
+        if(thisService.isPresent()){
+            Device device = deviceRepo.findById(deviceId)
+                    .orElseThrow(() -> new RuntimeException("Device not found"));
+            serviceOrder.setDevice_id(device);
+            serviceOrder.setId(soId);
+            return ServiceOrderREPO.save(serviceOrder);
+        }
+        return null;
     }
 }
