@@ -3,6 +3,7 @@ package Kani0dev.ATM.Mapper;
 import Kani0dev.ATM.DTO.ClientDTO;
 import Kani0dev.ATM.Model.Device.Device;
 import Kani0dev.ATM.Model.User.ClientUser;
+import Kani0dev.ATM.Model.User.Role;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -16,9 +17,9 @@ public class ClientMapper {
         ClientUser client = ClientUser.builder()
                 .id(dto.getId())
                 .name(dto.getName())
-                .password(dto.getPassword())
                 .telefone(dto.getTelefone())
                 .isActive(dto.getIsActive())
+                .role(Role.CLIENT)
                 .build();
 
         List<Device> devices = Optional.ofNullable(dto.getDeviceList())
@@ -37,8 +38,6 @@ public class ClientMapper {
         dto.setName(entity.getName());
         dto.setTelefone(entity.getTelefone());
         dto.setIsActive(entity.getIsActive());
-        dto.setPassword(entity.getPassword());
-
         // Mapeia a lista de objetos Device para uma lista de Long (IDs)
         if (entity.getAllDevice() != null) {
             List<Device> ids = entity.getAllDevice().stream().toList();

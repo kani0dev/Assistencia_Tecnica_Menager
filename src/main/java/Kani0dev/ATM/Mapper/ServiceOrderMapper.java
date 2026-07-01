@@ -10,7 +10,7 @@ public class ServiceOrderMapper {
     public static SODTO toDTO(ServiceOrder so) {
         return SODTO.builder()
                 .id(so.getId())
-                .deviceId(so.getDevice_id()
+                .deviceId(so.getDevice()
                         .getId()
                 )
                 .entry_date(so.getEntry_date())
@@ -26,7 +26,7 @@ public class ServiceOrderMapper {
     // DTO → ENTITY
     public static ServiceOrder toEntity(SODTO dto, Device device) {
         return ServiceOrder.builder()
-                .device_id(device)
+                .device(device)
                 .entry_date(dto.getEntry_date())
                 .curent_State(dto.getCurent_State())
                 .status(dto.getStatus())

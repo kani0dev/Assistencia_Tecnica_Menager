@@ -58,17 +58,12 @@ public class ClienteService {
         }
     }
 
-    //deactivat and activate
-    public ClientUser activate(long id,boolean bool) {
-        Optional<ClientUser> clientToDeactivate = ClientRepository.findById(id);
-        ClientUser client = clientToDeactivate.get();
-
-        client.setIsActive(bool);
-        ClientRepository.save(client);
-        return client;
-    }
-    public ClientUser deactivate(long id,boolean bool){
-        return activate(id,bool);
+    //set active status (activate/deactivate)
+    public ClientUser setActiveStatus(long id, boolean active) {
+        ClientUser client = ClientRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+        client.setIsActive(active);
+        return ClientRepository.save(client);
     }
 
 

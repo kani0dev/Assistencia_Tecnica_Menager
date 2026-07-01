@@ -2,12 +2,15 @@ package Kani0dev.ATM.Controler;
 
 import Kani0dev.ATM.Model.Device.ServiceOrder;
 import Kani0dev.ATM.Service.SOService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-@RestController @RequestMapping("/device/so/")
+@RestController
+@RequestMapping("/service-orders")
+@PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")
 public class SOControler {
 
     private final SOService serviceSO;
@@ -16,23 +19,23 @@ public class SOControler {
         this.serviceSO = serviceSO;
     }
 
-    @GetMapping("list/{device_id}")
-    public List<ServiceOrder> GetServiceOrders(@PathVariable long device_id){
-        return serviceSO.gettAllSOFromDevice(device_id);
+    @GetMapping
+    public List<ServiceOrder> GetServiceOrders(@RequestParam(required = false) Long deviceId){
+        return serviceSO.gettAllSOFromDevice(deviceId);
     }
 
-    @PostMapping("add/{device_id}")
-    public List<ServiceOrder> addServiceToDevice(@RequestBody ServiceOrder so,@PathVariable long device_id){
-        return serviceSO.addServiceTODevice(device_id,so);
+    @PostMapping
+    public List<ServiceOrder> addServiceToDevice(@RequestBody ServiceOrder so, @RequestParam Long deviceId){
+        return serviceSO.addServiceTODevice(deviceId, so);
     }
 
-    @DeleteMapping("rm/{device_id}@{so_id}")
-    public void DeletService(@PathVariable Long so_id,@PathVariable long device_id){
-        serviceSO.rmServiceFromDevice(device_id,so_id);
+    @DeleteMapping("/{soId}")
+    public void DeletService(@PathVariable Long soId){
+        serviceSO.rmServiceFromDevice(soId);
     }
 
-    @PutMapping("edit/{deviceId}@{so_id}")
-    public ServiceOrder editAServiceOrder(@PathVariable long so_id,@PathVariable Long deviceId,@RequestBody ServiceOrder so){
-        return serviceSO.editSO(deviceId,so_id,so);
+    @PutMapping("/{soId}")
+    public ServiceOrder editAServiceOrder(@PathVariable Long soId, @RequestParam Long deviceId, @RequestBody ServiceOrder so){
+        return serviceSO.editSO(soId, deviceId, so);
     }
 }
