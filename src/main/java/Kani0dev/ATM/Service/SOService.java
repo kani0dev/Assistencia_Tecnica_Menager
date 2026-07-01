@@ -33,7 +33,7 @@ public class SOService {
 
         device.addSO(serviceorder);
 
-        serviceorder.setDevice_id(device);
+        serviceorder.setDevice(device);
 
         if (serviceorder.getEntry_date() == null) {
             serviceorder.setEntry_date(LocalDateTime.now().toString());
@@ -46,7 +46,7 @@ public class SOService {
     public void rmServiceFromDevice(long soId){
         ServiceOrder serviceOrder = ServiceOrderREPO.findById(soId)
                 .orElseThrow(() -> new RuntimeException("Service order not found"));
-        Device device = serviceOrder.getDevice_id();
+        Device device = serviceOrder.getDevice();
         if (device != null) {
             device.rmSo(serviceOrder);
         }
@@ -59,7 +59,7 @@ public class SOService {
         if(thisService.isPresent()){
             Device device = deviceRepo.findById(deviceId)
                     .orElseThrow(() -> new RuntimeException("Device not found"));
-            serviceOrder.setDevice_id(device);
+            serviceOrder.setDevice(device);
             serviceOrder.setId(soId);
             return ServiceOrderREPO.save(serviceOrder);
         }

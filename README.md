@@ -1,10 +1,10 @@
-# ⚙️ Assistência Técnica Manager — Backend
+#  Assistência Técnica Manager — Backend
 
-## 📌 Descrição
+## Descrição
 
 API REST para gerenciamento de assistência técnica. Gerencia clientes, dispositivos e ordens de serviço, com autenticação Basic Auth para técnicos.
 
-## 🚀 Tecnologias
+##  Tecnologias
 
 - Java 21 + Spring Boot 4.0
 - Spring Web, Spring Data JPA, Spring Security
@@ -12,7 +12,7 @@ API REST para gerenciamento de assistência técnica. Gerencia clientes, disposi
 - Lombok
 - Docker Compose
 
-## 🧱 Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```
 src/main/java/Kani0dev/ATM/
@@ -56,7 +56,7 @@ src/main/java/Kani0dev/ATM/
     └── UserDetailsServiceImpl.java  # Carrega TechnicianUser para autenticação
 ```
 
-## 📦 Endpoints
+##  Endpoints
 
 ### Autenticação (`/auth`)
 | Método | Rota | Descrição | Acesso |
@@ -95,7 +95,7 @@ src/main/java/Kani0dev/ATM/
 
 > Endpoints de clientes, dispositivos e OS exigem `@PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")`.
 
-## 📥 Exemplos de Requisição
+##  Exemplos de Requisição
 
 ### Autenticação
 ```bash
@@ -181,7 +181,7 @@ curl -u tecnico1:123456 -X PUT "http://localhost:8080/service-orders/1?deviceId=
 curl -u tecnico1:123456 -X DELETE http://localhost:8080/service-orders/1
 ```
 
-## 🔐 Autenticação
+##  Autenticação
 
 - **Tipo:** HTTP Basic Auth
 - **Senhas:** hasheadas com BCrypt
@@ -193,7 +193,7 @@ curl -u tecnico1:123456 -X DELETE http://localhost:8080/service-orders/1
 curl -u tecnico1:123456 http://localhost:8080/clients
 ```
 
-## 🐳 Como executar
+##  Como executar
 
 ```bash
 docker compose up -d
@@ -214,6 +214,6 @@ MYSQL_USER=atm-db-adm
 MYSQL_PASSWORD=xyz112233
 ```
 
-## 🔗 Frontend
+## Frontend
 
 Repositório: [Assistencia_Tecnica_Menager_Frontend](https://github.com/kani0dev/Assistencia_Tecnica_Menager_Frontend)

@@ -7,5 +7,5 @@ import org.springframework.data.repository.config.RepositoryConfiguration;
 import java.util.List;
 
 public interface SORepo extends JpaRepository<ServiceOrder , Long>{
-    List<ServiceOrder> findByDevice_Id(Long deviceId);
+    List<ServiceOrder> findByDevice_Id(Long id);
 }

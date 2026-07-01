@@ -20,7 +20,7 @@ public class ServiceOrder {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", nullable = false)
     @JsonIgnore
-    private Device device_id;
+    private Device device;
 
     private String entry_date;
     private String curent_State;
